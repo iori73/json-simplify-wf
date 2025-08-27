@@ -31,6 +31,7 @@ interface HeaderProps {
   onConvert: (format: 'csv' | 'yaml') => void;
   onSave: (format: 'json' | 'csv' | 'yaml') => void;
   onShare: () => void;
+  onReset: () => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onSearchPrev: () => void;
@@ -53,6 +54,7 @@ export default function Header({
   onConvert,
   onSave,
   onShare,
+  onReset,
   searchQuery,
   onSearchChange,
   onSearchPrev,
@@ -257,12 +259,16 @@ export default function Header({
             onShowShortcuts={onShowShortcuts}
           />
 
-          {/* Logo and Title */}
-          <div className="flex items-center space-x-2">
+          {/* Logo and Title - Clickable to reset */}
+          <button 
+            onClick={onReset}
+            className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            title="Go back to start"
+          >
             <FileText className="h-6 w-6 text-primary" />
             <h1 className="text-xl font-semibold hidden sm:block">{t.title}</h1>
             <h1 className="text-lg font-semibold sm:hidden">JSON</h1>
-          </div>
+          </button>
 
           {/* Desktop Actions - Only visible on large screens */}
           <div className="hidden lg:flex items-center space-x-1 ml-6">

@@ -305,6 +305,28 @@ export default function JSONSimplify() {
     handleJsonData(SAMPLE_JSON)
   }, [handleJsonData])
 
+  // Reset to initial state
+  const handleReset = useCallback(() => {
+    setJsonData(null)
+    setSearchQuery('')
+    setSearchResults([])
+    setCurrentSearchIndex(0)
+    setSelectedNode(null)
+    setError(null)
+    setIsLoading(false)
+    setIsValidationPanelOpen(false)
+    setIsShortcutsModalOpen(false)
+    setFileStats({
+      size: '0 B',
+      nodeCount: 0,
+      renderTime: 0
+    })
+    // Clear URL search params if sharing URL was used
+    if (window.location.search) {
+      window.history.pushState({}, document.title, window.location.pathname)
+    }
+  }, [])
+
   // JSON operations
   const handleBeautify = useCallback(() => {
     if (!jsonData) return
@@ -446,6 +468,7 @@ export default function JSONSimplify() {
         onConvert={handleConvert}
         onSave={handleSave}
         onShare={handleShare}
+        onReset={handleReset}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onSearchPrev={handleSearchPrev}
