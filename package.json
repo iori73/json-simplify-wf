@@ -1,0 +1,44 @@
+{
+  "name": "json-simplify",
+  "version": "1.0.0",
+  "private": false,
+  "description": "A powerful, desktop-first JSON viewer and editor with tree visualization",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iori73/json-simplify-wf.git"
+  },
+  "author": "iori73",
+  "license": "MIT",
+  "keywords": ["json", "viewer", "editor", "tree", "visualization", "next.js", "react"],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "jsonpath-plus": "^10.3.0",
+    "jsonrepair": "^3.4.0",
+    "lucide-react": "^0.263.1",
+    "next": "^14.2.32",
+    "papaparse": "^5.4.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-window": "^1.8.8"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20",
+    "@types/papaparse": "^5.3.14",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-window": "^1.8.8",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
