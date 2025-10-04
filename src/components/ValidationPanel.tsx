@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { X, AlertTriangle, CheckCircle, Upload } from 'lucide-react'
+import Ajv from 'ajv'
+import addFormats from 'ajv-formats'
 import { ValidationError } from '@/types'
 
 interface ValidationPanelProps {
@@ -11,39 +13,44 @@ interface ValidationPanelProps {
   language: 'en' | 'jp' | 'es' | 'fr' | 'de' | 'zh' | 'ko' | 'pt'
 }
 
-// Simple JSON Schema validator (basic implementation)
+// AJV-based JSON Schema validator (enterprise-grade implementation)
 function validateJson(data: any, schema: any): ValidationError[] {
   const errors: ValidationError[] = []
   
   try {
-    // Basic validation - in a real app, you'd use a proper JSON Schema validator
-    if (schema.type && typeof data !== schema.type && !(schema.type === 'array' && Array.isArray(data))) {
-      errors.push({
-        path: '$',
-        message: `Expected type ${schema.type}, got ${Array.isArray(data) ? 'array' : typeof data}`
-      })
-    }
+    // Initialize AJV with formats support
+    const ajv = new Ajv({ 
+      allErrors: true, 
+      verbose: true,
+      strict: false 
+    })
+    addFormats(ajv)
     
-    if (schema.required && Array.isArray(schema.required)) {
-      schema.required.forEach((prop: string) => {
-        if (!data || !(prop in data)) {
-          errors.push({
-            path: `$.${prop}`,
-            message: `Missing required property: ${prop}`
-          })
-        }
-      })
-    }
+    // Compile and validate schema
+    const validate = ajv.compile(schema)
+    const valid = validate(data)
     
-    if (schema.properties && data && typeof data === 'object') {
-      Object.keys(schema.properties).forEach(prop => {
-        if (prop in data) {
-          const propErrors = validateJson(data[prop], schema.properties[prop])
-          errors.push(...propErrors.map(err => ({
-            ...err,
-            path: `$.${prop}${err.path.substring(1)}`
-          })))
+    if (!valid && validate.errors) {
+      // Convert AJV errors to our ValidationError format
+      validate.errors.forEach(error => {
+        const path = error.instancePath || '$'
+        let message = error.message || 'Validation error'
+        
+        // Enhance error messages with property information
+        if (error.keyword === 'required') {
+          message = `Missing required property: ${error.params?.missingProperty || 'unknown'}`
+        } else if (error.keyword === 'type') {
+          message = `Expected type ${error.params?.type}, got ${typeof error.data}`
+        } else if (error.keyword === 'format') {
+          message = `Invalid format: ${error.message}`
+        } else if (error.keyword === 'enum') {
+          message = `Value must be one of: ${error.params?.allowedValues?.join(', ')}`
         }
+        
+        errors.push({
+          path: path || '$',
+          message: message
+        })
       })
     }
   } catch (err) {

@@ -1,0 +1,99 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice Smith",
+      "email": "alice@example.com",
+      "address": {
+        "street": "123 Main St",
+        "city": "Boston",
+        "state": "MA",
+        "zip": "02101",
+        "coordinates": {
+          "lat": 42.3601,
+          "lng": -71.0589
+        }
+      },
+      "preferences": {
+        "theme": "dark",
+        "notifications": true,
+        "languages": ["en", "es"]
+      },
+      "orders": [
+        {
+          "id": "order-001",
+          "date": "2025-01-15T10:30:00Z",
+          "items": [
+            {"name": "Laptop", "price": 999.99, "quantity": 1},
+            {"name": "Mouse", "price": 25.50, "quantity": 2}
+          ],
+          "total": 1050.99
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bob Johnson",
+      "email": "bob@example.com",
+      "address": {
+        "street": "456 Oak Ave",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "coordinates": {
+          "lat": 40.7128,
+          "lng": -74.0060
+        }
+      },
+      "preferences": {
+        "theme": "light",
+        "notifications": false,
+        "languages": ["en"]
+      },
+      "orders": []
+    }
+  ],
+  "products": [
+    {
+      "id": "laptop-001",
+      "name": "MacBook Pro",
+      "category": "Electronics",
+      "price": 1299.99,
+      "inStock": true,
+      "specifications": {
+        "processor": "M2 Pro",
+        "memory": "16GB",
+        "storage": "512GB SSD",
+        "display": "14-inch Retina"
+      }
+    },
+    {
+      "id": "mouse-001", 
+      "name": "Wireless Mouse",
+      "category": "Accessories",
+      "price": 29.99,
+      "inStock": true,
+      "specifications": {
+        "connectivity": "Bluetooth 5.0",
+        "battery": "Rechargeable",
+        "color": "Space Gray"
+      }
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "generated": "2025-01-15T10:30:00Z",
+    "source": "test-data-generator",
+    "recordCount": {
+      "users": 2,
+      "products": 2,
+      "totalOrders": 1
+    },
+    "features": [
+      "user-management",
+      "product-catalog",
+      "order-processing",
+      "preferences"
+    ]
+  }
+}

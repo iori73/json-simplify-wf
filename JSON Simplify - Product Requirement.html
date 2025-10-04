@@ -1,0 +1,712 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>JSON Simplify - Product Requirement</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(134, 131, 126, 1);
+	fill: rgba(134, 131, 126, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(63, 126, 190, 1);
+	fill: rgba(63, 126, 190, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 111, 200, 0.09);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(134, 131, 126, 1);
+	fill: rgba(134, 131, 126, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(63, 126, 190, 1);
+	fill: rgba(63, 126, 190, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(232, 242, 250, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 99, 174, 0.172); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="253d4e54-180b-8021-bc21-fa8f5f3f06c8" class="page sans"><header><div class="page-header-icon undefined"><img class="icon notion-static-icon" src="https://www.notion.so/icons/pencil_gray.svg"/></div><h1 class="page-title">JSON Simplify - Product Requirement</h1><p class="page-description"></p></header><div class="page-body"><div id="253d4e54-180b-8182-9ba8-dd50c6d44f6d" class="column-list"><div id="253d4e54-180b-8118-b043-fea73a1b6d1d" style="width:18.75%" class="column"><nav id="253d4e54-180b-81ad-8b36-ffcaec59248d" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-814e-9a88-d824be55ad6e">📌 <strong>Project Overview</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-816f-90a5-f54f9f1fe72f"><strong>🎯 Objective</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-81f3-aa62-d7ac35200bd9">👤 User Personas</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-8122-b866-db91a1708e24">✅ Success Metrics / KPIs</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-814f-b781-c5ccd0d36c2d"><strong>🧩 Key Features / Requirements</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-8127-874c-f9207b6e18ef">🖥️ User Stories</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-81d3-93d0-f88b8bd51fb9">📐 UX &amp; Design</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-812f-a38a-fc679fd1cd9b">🧪 Scope of Work</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-8145-9ec9-ec440d1b5a77">🛠 Technical Requirements</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-8139-9e63-ec08e383d77c">🧱 Dependencies</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-818d-84c8-cef69b632b2a">🗓️ Timeline</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-81bb-bab8-cc2f4f609fae">🧠 Open Questions / Risks</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#253d4e54-180b-81b1-a534-d59ef965e4ae">📚 Supporting Documents</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#257d4e54-180b-8080-8cec-c5adc5083ab4">📅 Meetings</a></div></nav><p id="254d4e54-180b-801e-8bb9-f17a52013336" class="">
+</p></div><div id="253d4e54-180b-8105-8010-fa66527db81f" style="width:81.25%" class="column"><h3 id="253d4e54-180b-814e-9a88-d824be55ad6e" class="">📌 <strong>Project Overview</strong></h3><hr id="253d4e54-180b-8126-ae57-dd0943e7b5c4"/><div id="253d4e54-180b-81c7-a82d-e4341256f183" class="column-list"><div id="253d4e54-180b-81e0-9090-fd60b1b8d980" style="width:100%" class="column"><figure class="block-color-default_background callout" style="white-space:pre-wrap;display:flex" id="253d4e54-180b-817d-aee2-f6e7fb808463"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://www.notion.so/icons/package_blue.svg"/></div><div style="width:100%"><p id="253d4e54-180b-8175-b07c-c340366cdd41" class=""><strong>Product: JSON Simplify</strong></p></div></figure><figure class="block-color-default_background callout" style="white-space:pre-wrap;display:flex" id="253d4e54-180b-8161-8eeb-dc73fd43c0e8"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://www.notion.so/icons/calendar-month_green.svg"/></div><div style="width:100%"><p id="253d4e54-180b-8179-bf20-d63332a9a205" class=""><strong>Last Updated: Aug 22, 2025</strong></p></div></figure></div><div id="253d4e54-180b-81d6-a756-f56bd23ea58c" style="width:100%" class="column"><figure class="block-color-default_background callout" style="white-space:pre-wrap;display:flex" id="253d4e54-180b-819e-993d-c8719e90a188"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://www.notion.so/icons/user-circle_pink.svg"/></div><div style="width:100%"><p id="253d4e54-180b-81e9-82ad-f44fd73e4c65" class=""><strong>Prepared By: Iori &amp; Ankur</strong></p></div></figure><figure class="block-color-default_background callout" style="white-space:pre-wrap;display:flex" id="253d4e54-180b-8196-8dec-e0fdcccb11b6"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://www.notion.so/icons/list-indent_purple.svg"/></div><div style="width:100%"><p id="253d4e54-180b-8180-9b93-c98f27f94591" class=""><strong>Version: v1</strong></p></div></figure></div><div id="253d4e54-180b-818d-969b-ede588c8efd7" style="width:100%" class="column"><figure class="block-color-default_background callout" style="white-space:pre-wrap;display:flex" id="253d4e54-180b-816e-9b00-f93886976a9f"><div style="font-size:1.5em"><img class="icon notion-static-icon" src="https://www.notion.so/icons/calendar-month_blue.svg"/></div><div style="width:100%"><p id="253d4e54-180b-8111-a9cb-c8826fd275bb" class=""><strong>Date Created: Aug 18, 2025</strong></p></div></figure><p id="253d4e54-180b-81d0-9725-efdf459e48a6" class="">
+</p></div></div><h3 id="253d4e54-180b-816f-90a5-f54f9f1fe72f" class=""><strong>🎯 Objective</strong></h3><hr id="253d4e54-180b-818f-affe-fef165f54547"/><blockquote id="253d4e54-180b-81bd-952b-fd5974f48497" class=""><em>We are building JSON Simplify?</em></blockquote><ul id="253d4e54-180b-817f-8a9b-d92a2033c343" class="bulleted-list"><li style="list-style-type:disc">Simplify viewing and use of JSON in web development.</li></ul><ul id="253d4e54-180b-8114-bc95-ef7b11eb714f" class="bulleted-list"><li style="list-style-type:disc">The currently available products online are unreliable; some have functionality but are not user-friendly, while others are user-friendly but lack functionality.</li></ul><ul id="253d4e54-180b-8197-995c-f6e509a92d9a" class="bulleted-list"><li style="list-style-type:disc">It will simplify working with JSON when developers are dealing with large, messy JSON.</li></ul><h3 id="253d4e54-180b-81f3-aa62-d7ac35200bd9" class="">👤 User Personas</h3><hr id="253d4e54-180b-815e-89ce-df7d6cece0db"/><blockquote id="253d4e54-180b-817f-bbe0-de706eab837d" class=""><em>Who are you building this for?</em></blockquote><ul id="253d4e54-180b-815a-8af8-e4079ad40902" class="bulleted-list"><li style="list-style-type:disc">Web Engineers, who are completely relying on the web for dealing with JSON.</li></ul><ul id="253d4e54-180b-813e-8ddc-da9e24dcc62d" class="bulleted-list"><li style="list-style-type:disc">Student, Instructor, Tutor can use too.</li></ul><h3 id="253d4e54-180b-8122-b866-db91a1708e24" class="">✅ Success Metrics / KPIs</h3><hr id="253d4e54-180b-819f-abff-f7bcdf2e9d3a"/><blockquote id="253d4e54-180b-8112-b7c9-e450549648f9" class=""><em>How will we measure success?</em></blockquote><ul id="253d4e54-180b-8159-a224-c01226145eb0" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Coding</span><div class="indented"></div></li></ul><ul id="253d4e54-180b-8158-9c1a-f544b794a85f" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Deployment</span><div class="indented"></div></li></ul><ul id="253d4e54-180b-81d1-af8e-e856dd04413d" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Reaching to user</span><div class="indented"></div></li></ul><h3 id="253d4e54-180b-814f-b781-c5ccd0d36c2d" class=""><strong>🧩 Key Features / Requirements</strong></h3><hr id="253d4e54-180b-81af-82cc-d306a9e2be90"/><blockquote id="253d4e54-180b-8162-bc0a-df9716998091" class=""><em>What exactly needs to be built?</em></blockquote><div id="253d4e54-180b-81ee-a0c7-fe7a1b243956" class="collection-content"><h4 class="collection-title">Key Features</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><img src="https://www.notion.so/icons/stairs_gray.svg" style="width:14px;height:14px;display:block"/></span>Status</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/font_gray.svg" style="width:14px;height:14px;display:block"/></span>Feature</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/info-alternate_gray.svg" style="width:14px;height:14px;display:block"/></span>Description</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/priority-high_gray.svg" style="width:14px;height:14px;display:block"/></span>Priority</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/calendar_gray.svg" style="width:14px;height:14px;display:block"/></span>Timeline</th></tr></thead><tbody><tr id="253d4e54-180b-81c4-85b3-ddec2e0b7e9f"><td class="cell-ua|S"><div class="checkbox checkbox-off"></div></td><td class="cell-title"><a href="https://www.notion.so/Design-253d4e54180b81c485b3ddec2e0b7e9f?pvs=21"><img class="icon notion-static-icon" src="https://www.notion.so/icons/key_gray.svg"/>Design</a></td><td class="cell-i?o;">The design of the web app, focused on web first view because majority people do development in the desktop.</td><td class="cell-kt=L"><span class="selected-value select-value-color-red">High</span></td><td class="cell-EFWj"></td></tr><tr id="253d4e54-180b-816f-8214-e72ee2a61795"><td class="cell-ua|S"><div class="checkbox checkbox-off"></div></td><td class="cell-title"><a href="https://www.notion.so/Web-Flow-253d4e54180b816f8214e72ee2a61795?pvs=21"><img class="icon notion-static-icon" src="https://www.notion.so/icons/key_gray.svg"/>Web Flow</a></td><td class="cell-i?o;">How user will use it? The prototype of the web application. For now we will avoid the user registration.</td><td class="cell-kt=L"><span class="selected-value select-value-color-red">High</span></td><td class="cell-EFWj"></td></tr><tr id="253d4e54-180b-812e-b378-c2fe136a4366"><td class="cell-ua|S"><div class="checkbox checkbox-off"></div></td><td class="cell-title"><a href="https://www.notion.so/Coding-253d4e54180b812eb378c2fe136a4366?pvs=21"><img class="icon notion-static-icon" src="https://www.notion.so/icons/key_gray.svg"/>Coding</a></td><td class="cell-i?o;">Choosing the framework.<br/>Maintaining the GitHub repo.<br/>Coding.</td><td class="cell-kt=L"><span class="selected-value select-value-color-yellow">Medium</span></td><td class="cell-EFWj"></td></tr></tbody></table><br/><br/></div><p id="256d4e54-180b-80ee-b62d-f0724a73a5eb" class="">
+</p><div id="256d4e54-180b-80b8-9c5c-cc40ac728728" class="collection-content"><h4 class="collection-title">Feature comparison overview</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><img src="https://www.notion.so/icons/font_gray.svg" style="width:14px;height:14px;display:block"/></span>Platform / feature</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/link_gray.svg" style="width:14px;height:14px;display:block"/></span>URL</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Paste JSON</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>File upload</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>URL fetch</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Beautify</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Minify</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Tree view</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Text view</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Table view</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Search</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Copy key path</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Copy full JSON</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Dark mode</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Validate JSON</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Convert (XML/CSV)</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Diff/compare</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Save/share</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Ads</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/description_gray.svg" style="width:14px;height:14px;display:block"/></span>Notes</th></tr></thead><tbody><tr id="256d4e54-180b-8181-806d-e2d3103b6c52"><td class="cell-title"><a href="https://www.notion.so/JSON-Editor-Online-256d4e54180b8181806de2d3103b6c52?pvs=21">JSON Editor Online</a></td><td class="cell-CBFK"><a href="https://jsoneditoronline.org/" class="url-value">https://jsoneditoronline.org/</a></td><td class="cell-fuye">✔︎</td><td class="cell-E;&gt;I">✔︎ (file, URL)</td><td class="cell-kMIK">✔︎</td><td class="cell-S&gt;Ue">✔︎</td><td class="cell-Vfj~">partial</td><td class="cell-_w\e">✔︎</td><td class="cell-V:cV">✔︎</td><td class="cell-PWiO">✔︎</td><td class="cell-;AiM">✔︎ (find)</td><td class="cell-S^}w">✘</td><td class="cell-I~XJ">✔︎ (copy)</td><td class="cell-In~z">✘</td><td class="cell-Ct;@">partial</td><td class="cell-&gt;QdH">limited (CSV import)</td><td class="cell-`&lt;rG">✔︎ (compare two docs)</td><td class="cell-;YfI">✔︎ (save to file, share link)</td><td class="cell-S@UQ">✔︎</td><td class="cell-VwXi">Feature‑rich but cluttered UI; two side‑by‑side editors and numerous transform/sort/filter tools.</td></tr><tr id="256d4e54-180b-81ec-9a9b-d56c4ffd3f16"><td class="cell-title"><a href="https://www.notion.so/JSON-Formatter-Validator-256d4e54180b81ec9a9bd56c4ffd3f16?pvs=21">JSON Formatter &amp; Validator</a></td><td class="cell-CBFK"><a href="https://jsonformatter.org/" class="url-value">https://jsonformatter.org/</a></td><td class="cell-fuye">✔︎</td><td class="cell-E;&gt;I">✔︎</td><td class="cell-kMIK">✘</td><td class="cell-S&gt;Ue">✔︎</td><td class="cell-Vfj~">✔︎</td><td class="cell-_w\e">limited (graph/tree view)</td><td class="cell-V:cV">✔︎</td><td class="cell-PWiO">✘</td><td class="cell-;AiM">✘/unknown</td><td class="cell-S^}w">✘</td><td class="cell-I~XJ">partial (download)</td><td class="cell-In~z">✘</td><td class="cell-Ct;@">✔︎ (error messages)</td><td class="cell-&gt;QdH">✔︎ (XML/CSV/YAML)</td><td class="cell-`&lt;rG">✘</td><td class="cell-;YfI">✔︎ (download, print)</td><td class="cell-S@UQ">✔︎</td><td class="cell-VwXi">Offers validation, formatting and conversion; claims a tree/graph view, image preview in tree, auto‑update and local‑storage persistence.</td></tr><tr id="256d4e54-180b-811b-88ef-f87bfa9d89e8"><td class="cell-title"><a href="https://www.notion.so/Code-Beautify-JSON-Viewer-256d4e54180b811b88eff87bfa9d89e8?pvs=21">Code Beautify JSON Viewer</a></td><td class="cell-CBFK"><a href="https://codebeautify.org/jsonviewer" class="url-value">https://codebeautify.org/jsonviewer</a></td><td class="cell-fuye">✔︎</td><td class="cell-E;&gt;I">✔︎</td><td class="cell-kMIK">✔︎</td><td class="cell-S&gt;Ue">✔︎</td><td class="cell-Vfj~">✔︎</td><td class="cell-_w\e">✔︎</td><td class="cell-V:cV">✔︎</td><td class="cell-PWiO">✘</td><td class="cell-;AiM">✔︎ (search bar)</td><td class="cell-S^}w">✘</td><td class="cell-I~XJ">partial (manual copy)</td><td class="cell-In~z">✔︎ (toggle)</td><td class="cell-Ct;@">✔︎ (validate button)</td><td class="cell-&gt;QdH">✔︎ (XML/CSV)</td><td class="cell-`&lt;rG">✘</td><td class="cell-;YfI">✔︎ (save &amp; share, download)</td><td class="cell-S@UQ">✔︎</td><td class="cell-VwXi">Clean single‑page interface; tree viewer with search; includes auto‑update, big‑number toggle, dark mode and conversion features.</td></tr><tr id="256d4e54-180b-8059-935a-c13b43fccfa1"><td class="cell-title"><a href="https://www.notion.so/JSON-path-finder-256d4e54180b8059935ac13b43fccfa1?pvs=21">JSON path finder</a></td><td class="cell-CBFK"><a href="https://jsonpathfinder.com/" class="url-value">https://jsonpathfinder.com/</a></td><td class="cell-fuye">✔︎</td><td class="cell-E;&gt;I">✘</td><td class="cell-kMIK">✘</td><td class="cell-S&gt;Ue">✔︎</td><td class="cell-Vfj~">✔︎</td><td class="cell-_w\e">✘</td><td class="cell-V:cV">✘</td><td class="cell-PWiO">✘</td><td class="cell-;AiM">✘</td><td class="cell-S^}w">✔︎</td><td class="cell-I~XJ">✘</td><td class="cell-In~z">✘</td><td class="cell-Ct;@">✘</td><td class="cell-&gt;QdH">✘</td><td class="cell-`&lt;rG">✘</td><td class="cell-;YfI">✘</td><td class="cell-S@UQ">✘</td><td class="cell-VwXi"></td></tr><tr id="256d4e54-180b-81ce-9205-d9f1aa8706e2"><td class="cell-title"><a href="https://www.notion.so/JSON-Simplify-planned-256d4e54180b81ce9205d9f1aa8706e2?pvs=21">JSON Simplify (planned)</a></td><td class="cell-CBFK"></td><td class="cell-fuye">✔︎</td><td class="cell-E;&gt;I">likely ✔︎</td><td class="cell-kMIK">✘/unspecified</td><td class="cell-S&gt;Ue">✔︎</td><td class="cell-Vfj~">✔︎</td><td class="cell-_w\e">✔︎</td><td class="cell-V:cV">(not emphasised)</td><td class="cell-PWiO">✘</td><td class="cell-;AiM">✔︎</td><td class="cell-S^}w">✔︎</td><td class="cell-I~XJ">✔︎</td><td class="cell-In~z">✔︎</td><td class="cell-Ct;@">planned (JSON Repair / AJV)</td><td class="cell-&gt;QdH">✘ (out of scope)</td><td class="cell-`&lt;rG">✘ (out of scope)</td><td class="cell-;YfI">unspecified</td><td class="cell-S@UQ">✘</td><td class="cell-VwXi">Focus on reliability and simplicity: support large/complex JSON, expand/collapse, search, copy key paths, full copy and dark mode【71†source】; avoid extras like diff tools or auto‑suggest and emphasize smooth UX.</td></tr></tbody></table><br/><br/></div><p id="256d4e54-180b-8022-8b36-c1cad6e0f158" class="">
+</p><h3 id="253d4e54-180b-8127-874c-f9207b6e18ef" class="">🖥️ User Stories</h3><hr id="253d4e54-180b-81d1-8696-cdbef97c7ca8"/><blockquote id="253d4e54-180b-81d6-adb1-fec6c24a9a6a" class=""><em>Written from the user&#x27;s perspective.</em></blockquote><p id="253d4e54-180b-8197-8d78-f1febfba769b" class="">Examples:</p><ul id="253d4e54-180b-816e-80a1-fd5b895e482b" class="bulleted-list"><li style="list-style-type:disc">As a user, I want to paste a large JSON file so that I can view it in a structured, readable way.</li></ul><ul id="253d4e54-180b-803f-a973-cb9d03f0e403" class="bulleted-list"><li style="list-style-type:disc">As a user, I want to collapse and expand JSON nodes so that I can easily navigate nested data.</li></ul><ul id="253d4e54-180b-80a7-8b99-c11ef6cd190c" class="bulleted-list"><li style="list-style-type:disc">As a user, I want to search within JSON so that I can quickly find keys or values.</li></ul><ul id="253d4e54-180b-8028-9455-ef6068b1f1b0" class="bulleted-list"><li style="list-style-type:disc">As a user, I want to select the particular key and finally get the path and copied it so that I can easily use it anywhere.</li></ul><ul id="253d4e54-180b-8016-839b-d3dd36a51cc8" class="bulleted-list"><li style="list-style-type:disc">As a user, I want to beautify or minify JSON so that I can prepare it for debugging or production.</li></ul><ul id="253d4e54-180b-804c-a707-d21566552bf6" class="bulleted-list"><li style="list-style-type:disc">As a developer, I want to validate JSON against a schema so that I can ensure my data matches requirements.</li></ul><h3 id="253d4e54-180b-81d3-93d0-f88b8bd51fb9" class="">📐 UX &amp; Design</h3><hr id="253d4e54-180b-8109-a967-d3a69c4efd7a"/><blockquote id="253d4e54-180b-811d-a8c6-e60751644749" class=""><em>Include any design constraints or brand guidelines.</em></blockquote><ul id="253d4e54-180b-8160-a85e-ed7bf4c58711" class="bulleted-list"><li style="list-style-type:disc">Wireframes: [Link to Figma or Notion page]</li></ul><ul id="253d4e54-180b-8140-890e-c9a2fd07db22" class="bulleted-list"><li style="list-style-type:disc">UI mockups: [Add image/file or embed Figma]</li></ul><ul id="253d4e54-180b-8139-936e-d053e552fd3d" class="bulleted-list"><li style="list-style-type:disc">Design notes:</li></ul><h3 id="253d4e54-180b-812f-a38a-fc679fd1cd9b" class="">🧪 Scope of Work</h3><hr id="253d4e54-180b-81a1-9878-d0321c9feaad"/><blockquote id="253d4e54-180b-81a3-88f8-ef1bcd797a66" class=""><em>What’s in scope and what’s out?</em></blockquote><p id="253d4e54-180b-8166-92f4-cbd393723405" class=""><strong>In Scope:</strong></p><ul id="253d4e54-180b-80f8-8ee8-f777024a3a77" class="bulleted-list"><li style="list-style-type:disc">JSON  Paste functionality (support for large JSON).</li></ul><ul id="253d4e54-180b-80ac-a502-f50f7cdbf232" class="bulleted-list"><li style="list-style-type:disc">JSON Beautify &amp; Minify.</li></ul><ul id="253d4e54-180b-803f-80c3-c455606a305c" class="bulleted-list"><li style="list-style-type:disc">Expand/Collapse tree view for JSON navigation.</li></ul><ul id="253d4e54-180b-80c2-ae8c-ecfc46286113" class="bulleted-list"><li style="list-style-type:disc">Search within JSON keys/values.</li></ul><ul id="253d4e54-180b-807c-a283-e533917a1783" class="bulleted-list"><li style="list-style-type:disc">Copy path to particular key &amp; object.</li></ul><ul id="253d4e54-180b-8082-9b75-f5da25ba30f4" class="bulleted-list"><li style="list-style-type:disc">Copy JSON to clipboard.</li></ul><ul id="257d4e54-180b-8065-827b-f0017f2ade0f" class="bulleted-list"><li style="list-style-type:disc">Text view &amp; table view</li></ul><ul id="257d4e54-180b-80bb-8622-ee56afb86d15" class="bulleted-list"><li style="list-style-type:disc">Conver, save &amp; share(with sharable link)</li></ul><ul id="257d4e54-180b-8040-a8f3-fb8a4f19f71d" class="bulleted-list"><li style="list-style-type:disc">Website Language: English &amp; Japanese</li></ul><ul id="253d4e54-180b-80d6-a1ae-cf9ec31da161" class="bulleted-list"><li style="list-style-type:disc">Light/Dark mode for developer-friendly UI.</li></ul><p id="253d4e54-180b-8187-b598-c58b616001f2" class=""><strong>Out of Scope:</strong></p><ul id="253d4e54-180b-809c-9c68-e1518a2f322b" class="bulleted-list"><li style="list-style-type:disc">JSON diff/comparison tool.</li></ul><ul id="253d4e54-180b-8053-88bd-f349493a1d2a" class="bulleted-list"><li style="list-style-type:disc">Auto-suggestions.</li></ul><ul id="253d4e54-180b-80dc-8c83-d9b26fc17fdc" class="bulleted-list"><li style="list-style-type:disc">Mobile app version.</li></ul><h3 id="253d4e54-180b-8145-9ec9-ec440d1b5a77" class="">🛠 Technical Requirements</h3><hr id="253d4e54-180b-81aa-8cf2-ea2af6731e32"/><blockquote id="253d4e54-180b-81c8-97ca-f1bad866b9aa" class=""><em>For the engineering team</em></blockquote><ul id="253d4e54-180b-819f-8e37-c79825b4ec6c" class="bulleted-list"><li style="list-style-type:disc">Platforms (Web): “<em>Discussion required”</em></li></ul><ul id="253d4e54-180b-816a-93d3-f7e674c01188" class="bulleted-list"><li style="list-style-type:disc">Backend dependencies: “<em>Discussion required”</em><ul id="254d4e54-180b-8010-80d3-c7ceaab62899" class="bulleted-list"><li style="list-style-type:circle">Some JS libraries</li></ul><table id="254d4e54-180b-8000-87b0-e794d392ce47" class="simple-table"><tbody><tr id="254d4e54-180b-8051-bd5b-cd86ea8b7322"><td id="[Bhu" class="">JSON repair library</td><td id="wqpB" class=""><a href="https://github.com/josdejong/jsonrepair/">https://github.com/josdejong/jsonrepair/</a></td></tr><tr id="254d4e54-180b-8063-9ce2-dbe73c4122e7"><td id="[Bhu" class="">JSON Schema validator</td><td id="wqpB" class=""><a href="https://ajv.js.org/">https://ajv.js.org/</a></td></tr><tr id="254d4e54-180b-806e-a896-cfb06ae6790f"><td id="[Bhu" class="">JSON query language</td><td id="wqpB" class=""><a href="https://jsonquerylang.org/">https://jsonquerylang.org/</a><br/><a href="https://jmespath.org/">https://jmespath.org/</a><br/> <a href="https://github.com/JSONPath-Plus/JSONPath/">https://github.com/JSONPath-Plus/JSONPath/</a></td></tr><tr id="254d4e54-180b-8024-addd-c7465d1981ff"><td id="[Bhu" class="">JSON Patch library</td><td id="wqpB" class=""><a href="https://github.com/josdejong/immutable-json-patch/">https://github.com/josdejong/immutable-json-patch/</a></td></tr><tr id="254d4e54-180b-8076-8bdc-c14abf0b09a0"><td id="[Bhu" class="">Left JSON Editor</td><td id="wqpB" class=""><a href="https://github.com/josdejong/svelte-jsoneditor/">https://github.com/josdejong/svelte-jsoneditor/</a></td></tr><tr id="254d4e54-180b-807a-8df0-da0bf37d4342"><td id="[Bhu" class="">Right JSON Editor</td><td id="wqpB" class=""><a href="https://github.com/josdejong/svelte-jsoneditor/">https://github.com/josdejong/svelte-jsoneditor/</a></td></tr></tbody></table></li></ul><ul id="253d4e54-180b-817e-bdd0-c16dae436368" class="bulleted-list"><li style="list-style-type:disc">APIs needed: “<em>Discussion required”</em></li></ul><ul id="253d4e54-180b-819c-93eb-f1059ea6f3dc" class="bulleted-list"><li style="list-style-type:disc">Tech constraints or legacy considerations: “<em>Discussion required”</em></li></ul><h3 id="253d4e54-180b-8139-9e63-ec08e383d77c" class="">🧱 Dependencies</h3><hr id="253d4e54-180b-81fa-99dc-efcd9b2213a2"/><blockquote id="253d4e54-180b-81f3-8697-d9b27e31856b" class=""><em>What needs to happen before this can be built?</em></blockquote><ul id="253d4e54-180b-8118-a509-e5c9f31ec5c4" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">JSON Validation/Parser Library</span><div class="indented"></div></li></ul><ul id="253d4e54-180b-81bc-9b42-c311b873f2e9" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Code Editor/Tree Viewer Library</span><div class="indented"></div></li></ul><ul id="253d4e54-180b-81f0-b203-dac7c0af95e1" class="to-do-list"><li><div class="checkbox checkbox-off"></div> <span class="to-do-children-unchecked">Frontend Framework</span><div class="indented"></div></li></ul><h3 id="253d4e54-180b-818d-84c8-cef69b632b2a" class="">🗓️ Timeline</h3><hr id="253d4e54-180b-8157-b32b-d1875c6c6019"/><blockquote id="253d4e54-180b-81f8-82df-ed1ab7f5014e" class=""><em>Key dates and phases</em></blockquote><table id="253d4e54-180b-81e9-9d55-fada797dd8e0" class="simple-table"><thead class="simple-table-header"><tr id="253d4e54-180b-814d-b94e-e73f05473d21"><th id=";fx{" class="simple-table-header-color simple-table-header" style="width:214.125px">Milestone</th><th id="uNl]" class="simple-table-header-color simple-table-header">Date</th><th id="Ux=|" class="simple-table-header-color simple-table-header">Notes</th></tr></thead><tbody><tr id="253d4e54-180b-817f-8f43-d6484eb8261b"><td id=";fx{" class="" style="width:214.125px">Kickoff</td><td id="uNl]" class="">TBD</td><td id="Ux=|" class="">TBD</td></tr><tr id="253d4e54-180b-8135-8909-ed92fa169c5d"><td id=";fx{" class="" style="width:214.125px">Design Complete</td><td id="uNl]" class="">TBD</td><td id="Ux=|" class="">TBD</td></tr><tr id="253d4e54-180b-81b9-9ce3-c2a91dfe7b52"><td id=";fx{" class="" style="width:214.125px">Development Start</td><td id="uNl]" class="">TBD</td><td id="Ux=|" class="">TBD</td></tr><tr id="253d4e54-180b-816d-aa3c-c038bbd52ed1"><td id=";fx{" class="" style="width:214.125px">Beta Launch</td><td id="uNl]" class="">TBD</td><td id="Ux=|" class="">TBD</td></tr><tr id="253d4e54-180b-8139-b534-c86995bfd13d"><td id=";fx{" class="" style="width:214.125px">Public Launch</td><td id="uNl]" class="">TBD</td><td id="Ux=|" class="">TBD</td></tr></tbody></table><h3 id="253d4e54-180b-81bb-bab8-cc2f4f609fae" class="">🧠 Open Questions / Risks</h3><hr id="253d4e54-180b-81f9-8044-ffb5c5b5a5f7"/><ul id="253d4e54-180b-81d0-bf41-d43fb16048f0" class="bulleted-list"><li style="list-style-type:disc">Are there any major uncertainties?</li></ul><ul id="253d4e54-180b-8117-a3fa-c6f0840f3439" class="bulleted-list"><li style="list-style-type:disc">What are the potential blockers or risks?</li></ul><h3 id="253d4e54-180b-81b1-a534-d59ef965e4ae" class="">📚 Supporting Documents</h3><hr id="253d4e54-180b-81c3-967e-f7eaaeda6c43"/><ul id="253d4e54-180b-81ff-97a6-cfa2675db1b8" class="bulleted-list"><li style="list-style-type:disc">Research: [Link]</li></ul><ul id="253d4e54-180b-80e8-9c1d-c021f36dbdff" class="bulleted-list"><li style="list-style-type:disc">Examples: <a href="https://jsoneditoronline.org/#left=local.deleyo&amp;right=local.hoqaqu">first</a>, <a href="https://jsonpathfinder.com/">second</a>, <a href="https://jsonviewer.stack.hu/">third</a>, <a href="https://jsonsimplify.com/">fourth</a></li></ul><ul id="253d4e54-180b-819e-96d7-f904c28d61cb" class="bulleted-list"><li style="list-style-type:disc">Competitive Analysis: [Link]</li></ul><ul id="253d4e54-180b-814f-a8ba-ee52c4cb75ad" class="bulleted-list"><li style="list-style-type:disc">Previous version(s): [Link]</li></ul><h3 id="257d4e54-180b-8080-8cec-c5adc5083ab4" class="">📅 Meetings</h3><hr id="257d4e54-180b-8055-a584-d90d0fa09787"/><ul id="257d4e54-180b-808a-9d34-c0501e05d4c3" class="bulleted-list"><li style="list-style-type:disc"><a href="https://talk.brave.com/ClwCrLArwz1FHuBMj4LR00tQSsW2uAd__hfbtYr2yDc">Meeting Link</a> | DD-MM-YYYY | TBD | </li></ul><p id="257d4e54-180b-802c-8ea1-c353520f58b3" class="">
+</p><div id="253d4e54-180b-81bd-b407-cfa02ecf53a2" class="collection-content"><h4 class="collection-title">Supporting Documents</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><img src="https://www.notion.so/icons/font_gray.svg" style="width:14px;height:14px;display:block"/></span>Document Name</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/categories_gray.svg" style="width:14px;height:14px;display:block"/></span>Document Type</th><th><span class="icon property-icon"><img src="https://www.notion.so/icons/link_gray.svg" style="width:14px;height:14px;display:block"/></span>Document Link</th></tr></thead><tbody><tr id="253d4e54-180b-8140-bc32-eeeccdb5cc08"><td class="cell-title"><a href="https://www.notion.so/Technical-Architecture-Specifications-253d4e54180b8140bc32eeeccdb5cc08?pvs=21"><img class="icon notion-static-icon" src="https://www.notion.so/icons/attachment_gray.svg"/>Technical Architecture Specifications</a></td><td class="cell-oi;h"><span class="selected-value select-value-color-gray">Technical Documentation</span></td><td class="cell-[?lS"></td></tr><tr id="253d4e54-180b-81e0-8165-d33b8ce86a65"><td class="cell-title"><a href="https://www.notion.so/User-Journey-Maps-253d4e54180b81e08165d33b8ce86a65?pvs=21"><img class="icon notion-static-icon" src="https://www.notion.so/icons/attachment_gray.svg"/>User Journey Maps</a></td><td class="cell-oi;h"><span class="selected-value select-value-color-purple">Design</span></td><td class="cell-[?lS"></td></tr><tr id="253d4e54-180b-8154-af6d-e5ac9b33ae87"><td class="cell-title"><a href="https://www.notion.so/Market-Research-Analysis-Report-253d4e54180b8154af6de5ac9b33ae87?pvs=21"><img class="icon notion-static-icon" src="https://www.notion.so/icons/attachment_gray.svg"/>Market Research Analysis Report</a></td><td class="cell-oi;h"><span class="selected-value select-value-color-orange">Market Analysis</span></td><td class="cell-[?lS"></td></tr></tbody></table><br/><br/></div></div></div><p id="257d4e54-180b-80f4-ae2d-fd3b8bf91745" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

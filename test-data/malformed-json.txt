@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      id: 1,
+      'name': "Alice",
+      "email": "alice@example.com",
+      "active": true,
+      "metadata": {
+        "created": "2025-01-15T10:30:00Z",
+        "tags": ["new", "premium",]
+      }
+    },
+    {
+      "id": 2,
+      "name": 'Bob',
+      "email": "bob@example.com"
+      "active": false
+    }
+  ],
+  "status": "ok"
+}

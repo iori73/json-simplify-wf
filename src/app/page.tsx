@@ -6,9 +6,12 @@ import ViewTabs from '@/components/ViewTabs'
 import EmptyState from '@/components/EmptyState'
 import TreeView from '@/components/TreeView'
 import TextView from '@/components/TextView'
+import TableView from '@/components/TableView'
 import ValidationPanel from '@/components/ValidationPanel'
 import ShortcutsModal from '@/components/ShortcutsModal'
 import MobileWarning from '@/components/MobileWarning'
+import PerformanceDashboard from '@/components/PerformanceDashboard'
+import { usePerformanceMonitor } from '@/hooks/usePerformanceMonitor'
 import { 
   ViewMode, 
   JsonNode, 
@@ -75,8 +78,10 @@ export default function JSONSimplify() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isMobileView, setIsMobileView] = useState(false)
+  const [isPerformanceDashboardVisible, setIsPerformanceDashboardVisible] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { measureJsonProcessing, measureAsyncOperation } = usePerformanceMonitor()
 
   // Check for mobile view on mount and resize
   useEffect(() => {
@@ -210,30 +215,32 @@ export default function JSONSimplify() {
 
   // JSON data processing
   const handleJsonData = useCallback((data: any) => {
-    const startTime = performance.now()
-    setError(null)
-    setIsLoading(true)
-    
-    try {
-      setJsonData(data)
+    measureJsonProcessing('JSON Data Processing', () => {
+      setError(null)
+      setIsLoading(true)
       
-      // Calculate stats
-      const jsonString = JSON.stringify(data)
-      const nodeCount = countJsonNodes(data)
-      const renderTime = performance.now() - startTime
-      
-      setFileStats({
-        size: formatFileSize(new Blob([jsonString]).size),
-        nodeCount,
-        renderTime: Math.round(renderTime * 100) / 100,
-        searchMatches: searchResults.length
-      })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to process JSON data')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [searchResults.length])
+      try {
+        const startTime = performance.now()
+        setJsonData(data)
+        
+        // Calculate stats
+        const jsonString = JSON.stringify(data)
+        const nodeCount = countJsonNodes(data)
+        const renderTime = performance.now() - startTime
+        
+        setFileStats({
+          size: formatFileSize(new Blob([jsonString]).size),
+          nodeCount,
+          renderTime: Math.round(renderTime * 100) / 100,
+          searchMatches: searchResults.length
+        })
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to process JSON data')
+      } finally {
+        setIsLoading(false)
+      }
+    })
+  }, [searchResults.length, measureJsonProcessing])
 
   // File upload
   const handleFileUpload = useCallback(async (file: File) => {
@@ -244,27 +251,29 @@ export default function JSONSimplify() {
       return
     }
 
-    setIsLoading(true)
-    
-    try {
-      const text = await file.text()
-      const data = JSON.parse(text)
-      handleJsonData(data)
-    } catch (err) {
+    await measureAsyncOperation('File Upload Processing', async () => {
+      setIsLoading(true)
+      
       try {
-        // Try to repair the JSON
-        const repairedText = jsonrepair(await file.text())
-        const data = JSON.parse(repairedText)
+        const text = await file.text()
+        const data = JSON.parse(text)
         handleJsonData(data)
-        // Show a warning that JSON was repaired
-        setError('JSON was automatically repaired. Please verify the result.')
-      } catch (repairErr) {
-        setError(`Failed to parse JSON: ${err instanceof Error ? err.message : String(err)}`)
+      } catch (err) {
+        try {
+          // Try to repair the JSON
+          const repairedText = jsonrepair(await file.text())
+          const data = JSON.parse(repairedText)
+          handleJsonData(data)
+          // Show a warning that JSON was repaired
+          setError('JSON was automatically repaired. Please verify the result.')
+        } catch (repairErr) {
+          setError(`Failed to parse JSON: ${err instanceof Error ? err.message : String(err)}`)
+        }
+      } finally {
+        setIsLoading(false)
       }
-    } finally {
-      setIsLoading(false)
-    }
-  }, [handleJsonData])
+    })
+  }, [handleJsonData, measureAsyncOperation])
 
   // Paste handling
   const handlePaste = useCallback(async () => {
@@ -547,19 +556,12 @@ export default function JSONSimplify() {
             )}
             
             {viewMode === 'table' && (
-              <div className="flex-1 flex items-center justify-center p-8">
-                <div className="text-center text-muted-foreground">
-                  <h3 className="text-lg font-medium mb-2">
-                    {language === 'en' ? 'Table View (Coming Soon)' : 'テーブルビュー (開発中)'}
-                  </h3>
-                  <p className="text-sm">
-                    {language === 'en' 
-                      ? 'Table view for tabular JSON data will be available in a future update.'
-                      : 'テーブル形式のJSONデータのためのテーブルビューは、将来のアップデートで利用可能になります。'
-                    }
-                  </p>
-                </div>
-              </div>
+              <TableView
+                data={jsonData}
+                searchQuery={searchQuery}
+                language={language}
+                onExport={handleSave}
+              />
             )}
           </>
         )}
@@ -575,6 +577,12 @@ export default function JSONSimplify() {
       <ShortcutsModal
         isOpen={isShortcutsModalOpen}
         onClose={() => setIsShortcutsModalOpen(false)}
+        language={language}
+      />
+
+      <PerformanceDashboard
+        isVisible={isPerformanceDashboardVisible}
+        onToggle={() => setIsPerformanceDashboardVisible(!isPerformanceDashboardVisible)}
         language={language}
       />
     </div>
