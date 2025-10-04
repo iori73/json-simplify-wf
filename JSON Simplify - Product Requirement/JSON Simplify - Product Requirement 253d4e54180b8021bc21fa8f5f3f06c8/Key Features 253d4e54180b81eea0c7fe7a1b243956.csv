@@ -1,0 +1,6 @@
+﻿Status,Feature,Description,Priority,Timeline
+No,Design,"The design of the web app, focused on web first view because majority people do development in the desktop.",High,
+No,Web Flow,How user will use it? The prototype of the web application. For now we will avoid the user registration.,High,
+No,Coding,"Choosing the framework.
+Maintaining the GitHub repo.
+Coding.",Medium,
