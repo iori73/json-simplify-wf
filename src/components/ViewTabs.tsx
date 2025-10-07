@@ -14,42 +14,42 @@ export default function ViewTabs({ currentView, onViewChange, language }: ViewTa
     en: {
       tree: 'Tree',
       text: 'Text',
-      table: 'Table (beta)'
+      table: 'Table'
     },
     jp: {
       tree: 'ツリー',
       text: 'テキスト',
-      table: 'テーブル (ベータ)'
+      table: 'テーブル'
     },
     es: {
       tree: 'Árbol',
       text: 'Texto',
-      table: 'Tabla (beta)'
+      table: 'Tabla'
     },
     fr: {
       tree: 'Arbre',
       text: 'Texte',
-      table: 'Tableau (bêta)'
+      table: 'Tableau'
     },
     de: {
       tree: 'Baum',
       text: 'Text',
-      table: 'Tabelle (Beta)'
+      table: 'Tabelle'
     },
     zh: {
       tree: '树形',
       text: '文本',
-      table: '表格 (测试版)'
+      table: '表格'
     },
     ko: {
       tree: '트리',
       text: '텍스트',
-      table: '테이블 (베타)'
+      table: '테이블'
     },
     pt: {
       tree: 'Árvore',
       text: 'Texto',
-      table: 'Tabela (beta)'
+      table: 'Tabela'
     }
   }
 
@@ -79,8 +79,12 @@ export default function ViewTabs({ currentView, onViewChange, language }: ViewTa
           {t.text}
         </button>
         <button
-          disabled
-          className="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-muted-foreground/50 cursor-not-allowed"
+          onClick={() => onViewChange('table')}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            currentView === 'table'
+              ? 'border-primary text-primary'
+              : 'border-transparent text-muted-foreground hover:text-foreground'
+          }`}
         >
           {t.table}
         </button>

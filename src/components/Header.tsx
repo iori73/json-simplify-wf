@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import {
   FileText,
   Upload,
@@ -240,7 +239,7 @@ export default function Header({
   }, [showLanguageMenu]);
 
   return (
-    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 relative z-50">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left Section - Logo + Hamburger */}
         <div className="flex items-center space-x-3">
@@ -381,13 +380,7 @@ export default function Header({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                if (languageButtonRef.current) {
-                  const rect = languageButtonRef.current.getBoundingClientRect();
-                  setLanguageMenuPosition({
-                    top: rect.bottom + window.scrollY + 4,
-                    left: rect.right - 128, // 128px is the width of the menu
-                  });
-                }
+                console.log('Language button clicked, current menu state:', showLanguageMenu);
                 setShowLanguageMenu(!showLanguageMenu);
               }}
               className="inline-flex items-center space-x-1 rounded-md px-2 py-1 text-sm hover:bg-accent hover:text-accent-foreground select-none"
@@ -396,17 +389,14 @@ export default function Header({
               <span>{language.toUpperCase()}</span>
               <ChevronDown className="h-3 w-3" />
             </button>
-            {showLanguageMenu &&
-              typeof window !== 'undefined' &&
-              createPortal(
-                <div
-                  className="fixed w-32 rounded-md border bg-background p-1 shadow-xl z-[9999] max-h-64 overflow-y-auto select-none"
-                  style={{
-                    top: languageMenuPosition.top,
-                    left: languageMenuPosition.left,
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
+            {showLanguageMenu && (
+              <div
+                className="absolute top-full right-0 mt-1 w-32 rounded-md border bg-background p-1 shadow-xl z-10 max-h-64 overflow-y-auto select-none"
+                onClick={(e) => {
+                  console.log('Language menu container clicked');
+                  e.stopPropagation();
+                }}
+              >
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -424,6 +414,7 @@ export default function Header({
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
+                      console.log('Clicking Japanese button, current language:', language);
                       onLanguageChange('jp');
                       setShowLanguageMenu(false);
                     }}
@@ -463,6 +454,7 @@ export default function Header({
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
+                      console.log('Clicking German button, current language:', language);
                       onLanguageChange('de');
                       setShowLanguageMenu(false);
                     }}
@@ -502,6 +494,7 @@ export default function Header({
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
+                      console.log('Clicking Portuguese button, current language:', language);
                       onLanguageChange('pt');
                       setShowLanguageMenu(false);
                     }}
@@ -511,9 +504,8 @@ export default function Header({
                   >
                     Português
                   </button>
-                </div>,
-                document.body,
-              )}
+              </div>
+            )}
           </div>
 
           {/* Shortcuts - Desktop Only */}

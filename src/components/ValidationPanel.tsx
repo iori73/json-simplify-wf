@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import { X, AlertTriangle, CheckCircle, Upload } from 'lucide-react'
-import Ajv from 'ajv'
-import addFormats from 'ajv-formats'
 import { ValidationError } from '@/types'
 
 interface ValidationPanelProps {
@@ -14,10 +12,27 @@ interface ValidationPanelProps {
 }
 
 // AJV-based JSON Schema validator (enterprise-grade implementation)
-function validateJson(data: any, schema: any): ValidationError[] {
+async function validateJson(data: any, schema: any): Promise<ValidationError[]> {
   const errors: ValidationError[] = []
   
   try {
+    // Server-side fallback - basic validation
+    if (typeof window === 'undefined') {
+      if (schema.type && typeof data !== schema.type && !(schema.type === 'array' && Array.isArray(data))) {
+        errors.push({
+          path: '$',
+          message: `Expected type ${schema.type}, got ${Array.isArray(data) ? 'array' : typeof data}`
+        })
+      }
+      return errors
+    }
+    
+    // Dynamic import for client-side only
+    const [{ default: Ajv }, { default: addFormats }] = await Promise.all([
+      import('ajv'),
+      import('ajv-formats')
+    ])
+    
     // Initialize AJV with formats support
     const ajv = new Ajv({ 
       allErrors: true, 
@@ -177,7 +192,7 @@ export default function ValidationPanel({ isOpen, onClose, jsonData, language }:
 
   const t = labels[language]
 
-  const handleValidate = () => {
+  const handleValidate = async () => {
     if (!jsonData) {
       setValidationErrors([{
         path: '$',
@@ -195,7 +210,7 @@ export default function ValidationPanel({ isOpen, onClose, jsonData, language }:
     
     try {
       const parsedSchema = JSON.parse(schema)
-      const errors = validateJson(jsonData, parsedSchema)
+      const errors = await validateJson(jsonData, parsedSchema)
       setValidationErrors(errors)
     } catch (err) {
       setValidationErrors([{

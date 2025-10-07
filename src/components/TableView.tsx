@@ -236,9 +236,54 @@ export default function TableView({ data, searchQuery, language, onExport }: Tab
   }
 
   const handleExport = (format: 'csv' | 'json') => {
-    if (onExport) {
+    if (format === 'csv') {
+      // Export the actual table data that's currently displayed
+      try {
+        const csvContent = convertTableToCSV(processedRows, columns)
+        downloadFile(csvContent, 'table-data.csv', 'text/csv')
+      } catch (err) {
+        console.error('CSV export failed:', err)
+      }
+    } else if (onExport) {
       onExport(format)
     }
+  }
+
+  // Convert table rows to CSV format
+  const convertTableToCSV = (rows: TableRow[], columns: ColumnConfig[]): string => {
+    if (rows.length === 0) return ''
+    
+    // Create header row
+    const headers = columns.map(col => col.label)
+    
+    // Create data rows
+    const dataRows = rows.map(row => 
+      columns.map(col => {
+        const value = row[col.key]
+        if (value == null) return ''
+        if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+          return `"${value.replace(/"/g, '""')}"`
+        }
+        return String(value)
+      })
+    )
+    
+    // Combine headers and data
+    const allRows = [headers, ...dataRows]
+    return allRows.map(row => row.join(',')).join('\n')
+  }
+
+  // Download file helper
+  const downloadFile = (content: string, filename: string, mimeType: string) => {
+    const blob = new Blob([content], { type: mimeType })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   // Row renderer for virtualization
@@ -281,8 +326,9 @@ export default function TableView({ data, searchQuery, language, onExport }: Tab
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
-      {/* Table Controls */}
-      <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex-1 flex flex-col min-h-0 pb-20">
+        {/* Table Controls */}
+        <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center space-x-4">
           <div className="text-sm text-muted-foreground">
             {processedRows.length} {t.rows} • {columns.length} {t.columns}
@@ -326,50 +372,55 @@ export default function TableView({ data, searchQuery, language, onExport }: Tab
         </div>
       </div>
 
-      {/* Table Header */}
-      <div className="border-b bg-muted/50">
-        <div className="flex">
-          {columns.map((col) => (
-            <div
-              key={col.key}
-              className="px-3 py-3 text-sm font-medium border-r flex-shrink-0 cursor-pointer hover:bg-accent/50"
-              style={{ width: col.width }}
-              onClick={() => handleSort(col.key)}
-            >
-              <div className="flex items-center justify-between">
-                <span className="truncate">{col.label}</span>
-                {sortColumn === col.key && (
-                  <div className="ml-1">
-                    {sortDirection === 'asc' ? (
-                      <ChevronUp className="h-3 w-3" />
-                    ) : (
-                      <ChevronDown className="h-3 w-3" />
+      {/* Table Container with Horizontal Scroll */}
+      <div className="flex-1 min-h-0 overflow-x-auto p-4">
+        <div style={{ minWidth: totalWidth }}>
+          {/* Table Header */}
+          <div className="border-b bg-muted/50 sticky top-0 z-10">
+            <div className="flex">
+              {columns.map((col) => (
+                <div
+                  key={col.key}
+                  className="px-3 py-3 text-sm font-medium border-r flex-shrink-0 cursor-pointer hover:bg-accent/50"
+                  style={{ width: col.width }}
+                  onClick={() => handleSort(col.key)}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="truncate">{col.label}</span>
+                    {sortColumn === col.key && (
+                      <div className="ml-1">
+                        {sortDirection === 'asc' ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-              </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Table Body - Virtualized */}
+          <div className="min-h-0">
+            {processedRows.length > 0 ? (
+              <List
+                height={500}
+                itemCount={processedRows.length}
+                itemSize={40}
+                width={totalWidth}
+              >
+                {Row}
+              </List>
+            ) : (
+              <div className="flex items-center justify-center py-8 text-muted-foreground">
+                {searchQuery || localSearch ? 'No matching rows found' : t.noData}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Table Body - Virtualized */}
-      <div className="flex-1 min-h-0">
-        {processedRows.length > 0 ? (
-          <List
-            height={600}
-            itemCount={processedRows.length}
-            itemSize={40}
-            width={totalWidth}
-            className="overflow-x-auto"
-          >
-            {Row}
-          </List>
-        ) : (
-          <div className="flex items-center justify-center py-8 text-muted-foreground">
-            {searchQuery || localSearch ? 'No matching rows found' : t.noData}
-          </div>
-        )}
       </div>
     </div>
   )

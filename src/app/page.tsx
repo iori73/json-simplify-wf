@@ -67,6 +67,7 @@ export default function JSONSimplify() {
   const [currentSearchIndex, setCurrentSearchIndex] = useState(0)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [language, setLanguage] = useState<'en' | 'jp' | 'es' | 'fr' | 'de' | 'zh' | 'ko' | 'pt'>('en')
+  const [isClientMounted, setIsClientMounted] = useState(false)
   const [isValidationPanelOpen, setIsValidationPanelOpen] = useState(false)
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false)
   const [selectedNode, setSelectedNode] = useState<JsonNode | null>(null)
@@ -79,6 +80,8 @@ export default function JSONSimplify() {
   const [isLoading, setIsLoading] = useState(false)
   const [isMobileView, setIsMobileView] = useState(false)
   const [isPerformanceDashboardVisible, setIsPerformanceDashboardVisible] = useState(false)
+  const [expandAllTrigger, setExpandAllTrigger] = useState(0)
+  const [collapseAllTrigger, setCollapseAllTrigger] = useState(0)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { measureJsonProcessing, measureAsyncOperation } = usePerformanceMonitor()
@@ -134,17 +137,23 @@ export default function JSONSimplify() {
     }
   }, [isDarkMode])
 
-  // Language handling
+  // Client-side mounting
   useEffect(() => {
+    setIsClientMounted(true)
     const savedLanguage = localStorage.getItem('language') as 'en' | 'jp' | 'es' | 'fr' | 'de' | 'zh' | 'ko' | 'pt' | null
-    if (savedLanguage) {
+    if (savedLanguage && ['en', 'jp', 'es', 'fr', 'de', 'zh', 'ko', 'pt'].includes(savedLanguage)) {
       setLanguage(savedLanguage)
     }
   }, [])
 
+  // Language handling - save to localStorage whenever language changes
   useEffect(() => {
-    localStorage.setItem('language', language)
-  }, [language])
+    console.log('Language state changed to:', language);
+    if (isClientMounted) {
+      console.log('Saving to localStorage:', language);
+      localStorage.setItem('language', language)
+    }
+  }, [language, isClientMounted])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -184,13 +193,13 @@ export default function JSONSimplify() {
       // Alt + Cmd/Ctrl + → - Expand All
       if ((event.ctrlKey || event.metaKey) && event.altKey && event.key === 'ArrowRight') {
         event.preventDefault()
-        // Trigger expand all
+        setExpandAllTrigger(prev => prev + 1)
       }
       
       // Alt + Cmd/Ctrl + ← - Collapse All  
       if ((event.ctrlKey || event.metaKey) && event.altKey && event.key === 'ArrowLeft') {
         event.preventDefault()
-        // Trigger collapse all
+        setCollapseAllTrigger(prev => prev + 1)
       }
       
       // ? - Show shortcuts
@@ -487,7 +496,10 @@ export default function JSONSimplify() {
         isDarkMode={isDarkMode}
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
         language={language}
-        onLanguageChange={setLanguage}
+        onLanguageChange={(newLang) => {
+          console.log('Language change from Header:', newLang);
+          setLanguage(newLang);
+        }}
         onShowShortcuts={() => setIsShortcutsModalOpen(true)}
       />
 
@@ -543,6 +555,8 @@ export default function JSONSimplify() {
                 onCopyValue={handleCopyValue}
                 onCopyPath={handleCopyPath}
                 language={language}
+                expandAllTrigger={expandAllTrigger}
+                collapseAllTrigger={collapseAllTrigger}
               />
             )}
             
@@ -585,6 +599,7 @@ export default function JSONSimplify() {
         onToggle={() => setIsPerformanceDashboardVisible(!isPerformanceDashboardVisible)}
         language={language}
       />
+
     </div>
   )
 }

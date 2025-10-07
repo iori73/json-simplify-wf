@@ -13,6 +13,8 @@ interface TreeViewProps {
   onCopyValue: (value: any) => void;
   onCopyPath: (path: string) => void;
   language: 'en' | 'jp' | 'es' | 'fr' | 'de' | 'zh' | 'ko' | 'pt';
+  expandAllTrigger?: number;
+  collapseAllTrigger?: number;
 }
 
 interface TreeItemProps {
@@ -240,10 +242,97 @@ export default function TreeView({
   onCopyValue,
   onCopyPath,
   language,
+  expandAllTrigger,
+  collapseAllTrigger,
 }: TreeViewProps) {
+  const labels = {
+    en: {
+      expandAll: 'Expand All',
+      collapseAll: 'Collapse All',
+      nodes: 'Nodes',
+      matches: 'Matches'
+    },
+    jp: {
+      expandAll: 'すべて展開',
+      collapseAll: 'すべて折りたたむ',
+      nodes: 'ノード',
+      matches: 'マッチ'
+    },
+    es: {
+      expandAll: 'Expandir Todo',
+      collapseAll: 'Contraer Todo',
+      nodes: 'Nodos',
+      matches: 'Coincidencias'
+    },
+    fr: {
+      expandAll: 'Tout Développer',
+      collapseAll: 'Tout Réduire',
+      nodes: 'Nœuds',
+      matches: 'Correspondances'
+    },
+    de: {
+      expandAll: 'Alle Erweitern',
+      collapseAll: 'Alle Reduzieren',
+      nodes: 'Knoten',
+      matches: 'Treffer'
+    },
+    zh: {
+      expandAll: '全部展开',
+      collapseAll: '全部折叠',
+      nodes: '节点',
+      matches: '匹配'
+    },
+    ko: {
+      expandAll: '모두 펼치기',
+      collapseAll: '모두 접기',
+      nodes: '노드',
+      matches: '일치'
+    },
+    pt: {
+      expandAll: 'Expandir Tudo',
+      collapseAll: 'Recolher Tudo',
+      nodes: 'Nós',
+      matches: 'Correspondências'
+    }
+  }
+
+  const t = labels[language]
+  
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['$']));
   const [listHeight, setListHeight] = useState(600);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Handle expand all trigger
+  useEffect(() => {
+    if (expandAllTrigger && data) {
+      const allPaths = new Set<string>();
+      
+      const collectPaths = (obj: any, path: string = '$') => {
+        allPaths.add(path);
+        if (obj && typeof obj === 'object') {
+          if (Array.isArray(obj)) {
+            obj.forEach((item, index) => {
+              collectPaths(item, `${path}[${index}]`);
+            });
+          } else {
+            Object.keys(obj).forEach(key => {
+              collectPaths(obj[key], `${path}.${key}`);
+            });
+          }
+        }
+      };
+      
+      collectPaths(data);
+      setExpandedNodes(allPaths);
+    }
+  }, [expandAllTrigger, data]);
+
+  // Handle collapse all trigger
+  useEffect(() => {
+    if (collapseAllTrigger) {
+      setExpandedNodes(new Set(['$']));
+    }
+  }, [collapseAllTrigger]);
 
   // Calculate dynamic height based on available viewport space
   useEffect(() => {
@@ -391,23 +480,23 @@ export default function TreeView({
               onClick={handleExpandAll}
               className="inline-flex items-center space-x-1 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-accent transition-colors"
             >
-              <span>{language === 'en' ? 'Expand All' : 'すべて展開'}</span>
+              <span>{t.expandAll}</span>
             </button>
             <button
               onClick={handleCollapseAll}
               className="inline-flex items-center space-x-1 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-accent transition-colors"
             >
-              <span>{language === 'en' ? 'Collapse All' : 'すべて折りたたむ'}</span>
+              <span>{t.collapseAll}</span>
             </button>
           </div>
 
           <div className="status-bar">
             <span>
-              {language === 'en' ? 'Nodes' : 'ノード'}: {nodes.length}
+              {t.nodes}: {nodes.length}
               {searchQuery && searchResults.length > 0 && (
                 <>
                   {' '}
-                  • {language === 'en' ? 'Matches' : 'マッチ'}: {searchResults.length}
+                  • {t.matches}: {searchResults.length}
                 </>
               )}
             </span>
