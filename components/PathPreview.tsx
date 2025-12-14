@@ -95,7 +95,7 @@ export default function PathPreview({ selectedNode }: PathPreviewProps) {
                     </div>
                     <button
                         onClick={handleCopyPath}
-                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 rounded transition-colors flex-shrink-0"
+                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 rounded transition-colors flex-shrink-0 cursor-pointer"
                     >
                         {copiedItem === 'path' ? '✓ Copied' : 'Copy Path'}
                     </button>
@@ -110,7 +110,7 @@ export default function PathPreview({ selectedNode }: PathPreviewProps) {
                 <div className="mt-3 pt-3 border-t border-gray-700">
                     <button
                         onClick={handleCopyValue}
-                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 rounded transition-colors"
+                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 rounded transition-colors cursor-pointer"
                     >
                         {copiedItem === 'value' ? '✓ Copied' : 'Copy Value (JSON)'}
                     </button>

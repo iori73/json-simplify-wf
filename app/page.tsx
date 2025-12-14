@@ -29,7 +29,8 @@ export default function Home() {
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [rootNode, setRootNode] = useState<TreeNode | null>(null);
   const [selectedNode, setSelectedNode] = useState<TreeNode | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchKey, setSearchKey] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set());
 
   // Load JSON from URL on mount (for shareable links)
@@ -75,8 +76,8 @@ export default function Home() {
 
   // Handle search - auto-expand matching nodes
   useEffect(() => {
-    if (searchTerm && rootNode) {
-      const matches = searchTree(rootNode, searchTerm);
+    if ((searchKey || searchValue) && rootNode) {
+      const matches = searchTree(rootNode, searchKey, searchValue);
 
       // Expand all parent paths to reveal matches
       const pathsToExpand = new Set<string>();
@@ -88,13 +89,13 @@ export default function Home() {
 
       setExpandedPaths(pathsToExpand);
     }
-  }, [searchTerm, rootNode]);
+  }, [searchKey, searchValue, rootNode]);
 
   // Get search match count
   const searchMatches = useMemo(() => {
-    if (!searchTerm || !rootNode) return [];
-    return searchTree(rootNode, searchTerm);
-  }, [searchTerm, rootNode]);
+    if ((!searchKey && !searchValue) || !rootNode) return [];
+    return searchTree(rootNode, searchKey, searchValue);
+  }, [searchKey, searchValue, rootNode]);
 
   // Handle node click
   const handleNodeClick = (node: TreeNode) => {
@@ -135,8 +136,10 @@ export default function Home() {
       {/* Search bar */}
       {rootNode && (
         <SearchBar
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
+          searchKey={searchKey}
+          searchValue={searchValue}
+          onSearchKeyChange={setSearchKey}
+          onSearchValueChange={setSearchValue}
           matchCount={searchMatches.length}
         />
       )}
@@ -158,7 +161,8 @@ export default function Home() {
             rootNode={rootNode}
             onNodeClick={handleNodeClick}
             selectedPath={selectedNode?.path || null}
-            searchTerm={searchTerm}
+            searchKey={searchKey}
+            searchValue={searchValue}
             expandedPaths={expandedPaths}
             onToggleExpand={handleToggleExpand}
           />
@@ -175,7 +179,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-800 border-t border-gray-700 px-6 py-3">
         <p className="text-xs text-gray-400 text-center">
-          Click values to copy paths • Drag to select and copy JSON values • Search to find keys
+          Click values to copy paths • Drag to select and copy JSON values • Search by key or value
         </p>
       </footer>
     </div>

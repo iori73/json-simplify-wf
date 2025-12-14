@@ -48,6 +48,10 @@ export interface PathPreviewProps {
 }
 
 export interface SearchBarProps {
-    searchTerm: string;
-    onSearchChange: (term: string) => void;
+    searchKey: string;
+    searchValue: string;
+    onSearchKeyChange: (term: string) => void;
+    onSearchValueChange: (term: string) => void;
+    matchCount?: number;
+
 }

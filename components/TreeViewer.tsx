@@ -18,7 +18,8 @@ interface TreeViewerProps {
     rootNode: TreeNode | null;
     onNodeClick: (node: TreeNode) => void;
     selectedPath: string | null;
-    searchTerm: string;
+    searchKey: string;
+    searchValue: string;
     expandedPaths: Set<string>;
     onToggleExpand: (path: string) => void;
 }
@@ -27,7 +28,8 @@ export default function TreeViewer({
     rootNode,
     onNodeClick,
     selectedPath,
-    searchTerm,
+    searchKey,
+    searchValue,
     expandedPaths,
     onToggleExpand,
 }: TreeViewerProps) {
@@ -59,7 +61,8 @@ export default function TreeViewer({
                         onNodeClick={onNodeClick}
                         isExpanded={expandedPaths.has(child.path)}
                         isSelected={selectedPath === child.path}
-                        searchTerm={searchTerm}
+                        searchKey={searchKey}
+                        searchValue={searchValue}
                         expandedPaths={expandedPaths}
                     />
                 ))}

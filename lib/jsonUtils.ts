@@ -92,17 +92,18 @@ export function buildPath(parentPath: string, key: string, isArrayIndex: boolean
  * @param key - Key name for this node
  * @param parentPath - Path of parent node
  * @param depth - Current depth in tree
+ * @param isArrayElement - Whether this is an array element
  * @returns TreeNode structure
  */
 export function jsonToTree(
     json: unknown,
     key: string = 'root',
     parentPath: string = '',
-    depth: number = 0
+    depth: number = 0,
+    isArrayElement: boolean = false
 ): TreeNode {
     const type = getJsonType(json);
-    const isArrayIndex = !isNaN(Number(key)) && parentPath.includes('[');
-    const path = parentPath ? buildPath(parentPath, key, isArrayIndex) : key;
+    const path = parentPath ? buildPath(parentPath, key, isArrayElement) : key;
 
     const node: TreeNode = {
         key,
@@ -117,14 +118,14 @@ export function jsonToTree(
     if (type === 'object' && json !== null) {
         const obj = json as Record<string, unknown>;
         node.children = Object.entries(obj).map(([childKey, childValue]) => {
-            const childNode = jsonToTree(childValue, childKey, path, depth + 1);
+            const childNode = jsonToTree(childValue, childKey, path, depth + 1, false);
             childNode.parent = node;
             return childNode;
         });
     } else if (type === 'array') {
         const arr = json as unknown[];
         node.children = arr.map((item, index) => {
-            const childNode = jsonToTree(item, String(index), path, depth + 1);
+            const childNode = jsonToTree(item, String(index), path, depth + 1, true);
             childNode.parent = node;
             return childNode;
         });
@@ -176,7 +177,7 @@ export function toJsonString(value: unknown): string {
  * @param searchTerm - Term to search for (case-insensitive)
  * @returns Array of matching paths
  */
-export function searchTree(node: TreeNode, searchTerm: string): string[] {
+export function searchTreeByKey(node: TreeNode, searchTerm: string): string[] {
     const matches: string[] = [];
     const lowerSearch = searchTerm.toLowerCase();
 
@@ -194,6 +195,51 @@ export function searchTree(node: TreeNode, searchTerm: string): string[] {
 
     traverse(node);
     return matches;
+}
+
+/**
+ * Searches for nodes matching a value
+ * @param node - Root node to search from
+ * @param searchTerm - Term to search for (case-insensitive)
+ * @returns Array of matching paths
+ */
+export function searchTreeByValue(node: TreeNode, searchTerm: string): string[] {
+    const matches: string[] = [];
+    const lowerSearch = searchTerm.toLowerCase();
+
+    function traverse(currentNode: TreeNode) {
+        // Only search in leaf nodes (primitive values)
+        if (isLeafNode(currentNode.value)) {
+            const valueStr = String(currentNode.value).toLowerCase();
+            if (valueStr.includes(lowerSearch)) {
+                matches.push(currentNode.path);
+            }
+        }
+
+        // Recursively search children
+        if (currentNode.children) {
+            currentNode.children.forEach(traverse);
+        }
+    }
+
+    traverse(node);
+    return matches;
+}
+
+/**
+ * Searches for nodes matching both key and value
+ * @param node - Root node to search from
+ * @param keyTerm - Term to search in keys
+ * @param valueTerm - Term to search in values
+ * @returns Array of matching paths (union of both searches)
+ */
+export function searchTree(node: TreeNode, keyTerm: string, valueTerm: string): string[] {
+    const keyMatches = keyTerm ? searchTreeByKey(node, keyTerm) : [];
+    const valueMatches = valueTerm ? searchTreeByValue(node, valueTerm) : [];
+
+    // Combine and deduplicate matches
+    const allMatches = [...new Set([...keyMatches, ...valueMatches])];
+    return allMatches;
 }
 
 /**

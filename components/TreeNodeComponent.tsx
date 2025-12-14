@@ -24,7 +24,8 @@ interface TreeNodeComponentProps {
     onNodeClick: (node: TreeNode) => void;
     isExpanded: boolean;
     isSelected: boolean;
-    searchTerm: string;
+    searchKey: string;
+    searchValue: string;
     expandedPaths: Set<string>;
 }
 
@@ -34,7 +35,8 @@ export default function TreeNodeComponent({
     onNodeClick,
     isExpanded,
     isSelected,
-    searchTerm,
+    searchKey,
+    searchValue,
     expandedPaths,
 }: TreeNodeComponentProps) {
     const [showCopyHint, setShowCopyHint] = useState(false);
@@ -43,7 +45,9 @@ export default function TreeNodeComponent({
     const hasChildren = node.children && node.children.length > 0;
 
     // Determine if this node matches search
-    const matchesSearch = searchTerm && node.key.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesKey = searchKey && node.key.toLowerCase().includes(searchKey.toLowerCase());
+    const matchesValue = searchValue && isLeaf && String(node.value).toLowerCase().includes(searchValue.toLowerCase());
+    const matchesSearch = matchesKey || matchesValue;
 
     // Handle node click
     const handleClick = () => {
@@ -104,13 +108,13 @@ export default function TreeNodeComponent({
                 {!hasChildren && <span className="w-4 flex-shrink-0" />}
 
                 {/* Key name */}
-                <span className={`font-medium ${matchesSearch ? 'text-yellow-300' : 'text-gray-300'}`}>
+                <span className={`font-medium ${matchesKey ? 'text-yellow-300' : 'text-gray-300'}`}>
                     {node.key}:
                 </span>
 
                 {/* Value display */}
                 <span
-                    className={`${getTypeColor()} ${isLeaf ? 'select-text' : ''}`}
+                    className={`${getTypeColor()} ${isLeaf ? 'select-text' : ''} ${matchesValue ? 'text-yellow-300' : ''}`}
                     onMouseUp={isLeaf ? handleValueMouseUp : undefined}
                 >
                     {formatValueDisplay(node.value, node.type)}
@@ -135,7 +139,8 @@ export default function TreeNodeComponent({
                             onNodeClick={onNodeClick}
                             isExpanded={expandedPaths.has(child.path)}
                             isSelected={false}
-                            searchTerm={searchTerm}
+                            searchKey={searchKey}
+                            searchValue={searchValue}
                             expandedPaths={expandedPaths}
                         />
                     ))}
