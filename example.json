@@ -1,0 +1,92 @@
+{
+    "user": {
+        "id": 12345,
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "age": 30,
+        "isActive": true,
+        "role": "developer",
+        "metadata": null,
+        "preferences": {
+            "theme": "dark",
+            "notifications": true,
+            "language": "en"
+        }
+    },
+    "orders": [
+        {
+            "orderId": "ORD-001",
+            "date": "2024-01-15",
+            "status": "delivered",
+            "items": [
+                {
+                    "productId": "PROD-101",
+                    "name": "Laptop",
+                    "quantity": 1,
+                    "price": 999.99
+                },
+                {
+                    "productId": "PROD-102",
+                    "name": "Mouse",
+                    "quantity": 2,
+                    "price": 29.99
+                }
+            ],
+            "total": 1059.97,
+            "shipping": {
+                "address": "123 Main St",
+                "city": "New York",
+                "zipCode": "10001",
+                "country": "USA"
+            }
+        },
+        {
+            "orderId": "ORD-002",
+            "date": "2024-02-20",
+            "status": "pending",
+            "items": [
+                {
+                    "productId": "PROD-201",
+                    "name": "Keyboard",
+                    "quantity": 1,
+                    "price": 79.99
+                }
+            ],
+            "total": 79.99,
+            "shipping": {
+                "address": "456 Oak Ave",
+                "city": "San Francisco",
+                "zipCode": "94102",
+                "country": "USA"
+            }
+        }
+    ],
+    "stats": {
+        "totalOrders": 2,
+        "totalSpent": 1139.96,
+        "averageOrderValue": 569.98,
+        "lastOrderDate": "2024-02-20"
+    },
+    "tags": [
+        "premium",
+        "verified",
+        "newsletter"
+    ],
+    "contacts": {
+        "emergency": {
+            "name": "Jane Doe",
+            "phone": "+1-555-0123",
+            "relationship": "spouse"
+        },
+        "friends": [
+            {
+                "name": "Alice Smith",
+                "email": "alice@example.com"
+            },
+            {
+                "name": "Bob Johnson",
+                "email": "bob@example.com"
+            }
+        ]
+    }
+}
