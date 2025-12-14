@@ -126,10 +126,10 @@ export default function Home() {
               Navigate and explore JSON with ease
             </p>
           </div>
-          <ShareButton
+          {/* <ShareButton
             jsonString={jsonInput}
             disabled={!rootNode || !!jsonError}
-          />
+          /> */}
         </div>
       </header>
 
