@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/pako": "^2.0.4",
+    "@vercel/analytics": "^1.6.1",
     "next": "16.0.10",
     "pako": "^2.1.0",
     "react": "19.2.1",
