@@ -74,16 +74,16 @@ export default function TreeNodeComponent({
         }
     };
 
-    // Get color based on type
-    const getTypeColor = () => {
+    // Get color class based on type
+    const getTypeClass = () => {
         switch (node.type) {
-            case 'string': return 'text-green-400';
-            case 'number': return 'text-blue-400';
-            case 'boolean': return 'text-purple-400';
-            case 'null': return 'text-gray-500';
-            case 'array': return 'text-yellow-400';
-            case 'object': return 'text-orange-400';
-            default: return 'text-gray-300';
+            case 'string': return 'type-string';
+            case 'number': return 'type-number';
+            case 'boolean': return 'type-boolean';
+            case 'null': return 'type-null';
+            case 'array':
+            case 'object': return 'type-bracket';
+            default: return 'text-[var(--text-muted)]';
         }
     };
 
@@ -93,28 +93,33 @@ export default function TreeNodeComponent({
             <div
                 onClick={handleClick}
                 className={`
-          flex items-center gap-2 py-1 px-2 cursor-pointer hover:bg-gray-800 rounded
-          ${isSelected ? 'bg-gray-800 ring-1 ring-gray-600' : ''}
-          ${matchesSearch ? 'bg-yellow-900 bg-opacity-20' : ''}
-        `}
-                style={{ paddingLeft: `${node.depth * 20 + 8}px` }}
+                    flex items-center gap-2 py-1 px-2 cursor-pointer rounded transition-colors duration-150
+                    hover:bg-[var(--bg-hover)]
+                    ${isSelected ? 'bg-[var(--color-primary)]/20 border border-[var(--color-primary)]' : ''}
+                    ${matchesSearch ? 'bg-[var(--color-warning)]/20' : ''}
+                `}
+                style={{ paddingLeft: `${node.depth * 16 + 8}px` }}
             >
                 {/* Expand/collapse icon */}
                 {hasChildren && (
-                    <span className="text-gray-400 w-4 flex-shrink-0">
-                        {isExpanded ? '▼' : '▶'}
+                    <span 
+                        className="text-[var(--text-muted)] w-4 flex-shrink-0 text-xs transition-transform duration-200"
+                        style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                    >
+                        ▶
                     </span>
                 )}
                 {!hasChildren && <span className="w-4 flex-shrink-0" />}
 
                 {/* Key name */}
-                <span className={`font-medium ${matchesKey ? 'text-yellow-300' : 'text-gray-300'}`}>
-                    {node.key}:
+                <span className={`type-key ${matchesKey ? 'search-match' : ''}`}>
+                    {node.key}
                 </span>
+                <span className="text-[var(--text-muted)]">:</span>
 
                 {/* Value display */}
                 <span
-                    className={`${getTypeColor()} ${isLeaf ? 'select-text' : ''} ${matchesValue ? 'text-yellow-300' : ''}`}
+                    className={`${getTypeClass()} ${isLeaf ? 'select-text' : ''} ${matchesValue ? 'search-match' : ''}`}
                     onMouseUp={isLeaf ? handleValueMouseUp : undefined}
                 >
                     {formatValueDisplay(node.value, node.type)}
@@ -122,7 +127,7 @@ export default function TreeNodeComponent({
 
                 {/* Copy hint */}
                 {showCopyHint && (
-                    <span className="text-xs text-green-400 ml-2 animate-pulse">
+                    <span className="text-xs text-[var(--color-success)] ml-2">
                         ✓ Path copied
                     </span>
                 )}
@@ -130,7 +135,7 @@ export default function TreeNodeComponent({
 
             {/* Children (recursive) */}
             {hasChildren && isExpanded && node.children && (
-                <div>
+                <div className="border-l border-[var(--border-main)] ml-4">
                     {node.children.map((child, index) => (
                         <TreeNodeComponent
                             key={`${child.path}-${index}`}

@@ -1,0 +1,210 @@
+---
+description: React component conventions and patterns for json-simplify
+globs:
+  - "components/**/*.tsx"
+  - "app/**/*.tsx"
+alwaysApply: false
+---
+
+# React Component Conventions
+
+This document defines the coding standards for React components in this project.
+
+## File References
+@components/JsonInput.tsx
+@components/TreeViewer.tsx
+@lib/types.ts
+
+## File Structure
+
+Every component file should follow this structure:
+
+```tsx
+/**
+ * Component Name
+ * 
+ * Brief description of what this component does.
+ * Key features and responsibilities.
+ */
+
+'use client';  // If component uses client-side features
+
+import { useState, useRef } from 'react';  // React imports first
+import { SomeType } from '@/lib/types';     // Local type imports
+import { someUtil } from '@/lib/someUtils'; // Local utility imports
+import ChildComponent from './ChildComponent'; // Relative component imports
+
+interface ComponentNameProps {
+    // Props definition
+}
+
+export default function ComponentName({ prop1, prop2 }: ComponentNameProps) {
+    // Component implementation
+}
+```
+
+## Naming Conventions
+
+### Files
+- Components: PascalCase (e.g., `JsonInput.tsx`, `TreeViewer.tsx`)
+- Utilities: camelCase (e.g., `jsonUtils.ts`, `clipboardUtils.ts`)
+
+### Components
+- Use PascalCase: `JsonInput`, `TreeNodeComponent`
+- Name should describe what it is, not what it does
+
+### Props Interfaces
+- Use `ComponentNameProps` pattern
+- Define inline above the component (not in separate types.ts unless shared)
+
+```tsx
+interface JsonInputProps {
+    value: string;
+    onChange: (json: string) => void;
+    error: string | null;
+}
+```
+
+### Event Handlers
+- Prefix with `handle`: `handleClick`, `handleTextChange`, `handleDragOver`
+- For callbacks passed as props, use `on` prefix: `onChange`, `onNodeClick`
+
+### State Variables
+- Use descriptive camelCase: `isDragging`, `selectedNode`, `expandedPaths`
+
+## Component Patterns
+
+### Controlled Components
+Components should be controlled by parent state:
+
+```tsx
+// Good: Controlled component
+export default function JsonInput({ value, onChange }: JsonInputProps) {
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        onChange(e.target.value);  // Delegate to parent
+    };
+    return <textarea value={value} onChange={handleChange} />;
+}
+
+// Bad: Uncontrolled with internal state
+export default function JsonInput() {
+    const [value, setValue] = useState('');  // Don't manage shared state internally
+}
+```
+
+### Early Returns for Empty/Error States
+Handle edge cases at the top of the component:
+
+```tsx
+export default function TreeViewer({ rootNode }: TreeViewerProps) {
+    // Early return for empty state
+    if (!rootNode) {
+        return (
+            <div className="...">
+                <p>NO DATA DETECTED</p>
+            </div>
+        );
+    }
+
+    // Main render logic
+    return (
+        <div className="...">
+            {/* Tree content */}
+        </div>
+    );
+}
+```
+
+### Conditional Rendering
+Use logical AND for conditional UI elements:
+
+```tsx
+{error && (
+    <div className="error-panel">
+        <p>{error}</p>
+    </div>
+)}
+
+{!value && !error && (
+    <div className="helper-text">
+        <p>WAITING FOR INPUT...</p>
+    </div>
+)}
+```
+
+## TypeScript Practices
+
+### Props Typing
+- Always define Props interface
+- Use `string | null` instead of optional for nullable values that should be explicitly handled
+
+```tsx
+interface JsonInputProps {
+    value: string;           // Required
+    onChange: (json: string) => void;  // Callback
+    error: string | null;    // Explicitly nullable
+}
+```
+
+### Event Types
+Import and use React event types:
+
+```tsx
+import { ChangeEvent } from 'react';
+
+const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    // ...
+};
+
+const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+};
+```
+
+### Generic Types
+Use `unknown` instead of `any` for JSON values:
+
+```tsx
+// Good
+value: unknown;
+
+// Bad
+value: any;
+```
+
+## Import Order
+
+1. React imports (`import { useState } from 'react'`)
+2. External library imports
+3. Local type imports (`@/lib/types`)
+4. Local utility imports (`@/lib/jsonUtils`)
+5. Relative component imports (`./ChildComponent`)
+
+## JSDoc Comments
+
+Add JSDoc at the top of each component file:
+
+```tsx
+/**
+ * JSON Input Component
+ * 
+ * Left panel component that handles JSON input via:
+ * - Direct paste/typing
+ * - File upload
+ * - Validation and error display
+ * 
+ * This component is controlled - it receives JSON and calls onChange
+ */
+```
+
+## Styling
+
+- Use Tailwind CSS classes
+- Reference CSS variables from globals.css for theme support
+- Use `.theme-button`, `.theme-panel`, `.digital-text` utility classes
+
+```tsx
+<div className="bg-[var(--bg-panel)] border border-[var(--border-main)]">
+    <button className="theme-button px-2 py-1">CLICK</button>
+</div>
+```

@@ -52,28 +52,11 @@ export default function ShareButton({ jsonString, disabled }: ShareButtonProps) 
         }
     };
 
-    const getButtonClass = () => {
-        const baseClass = 'px-4 py-2 text-sm rounded transition-colors';
-
-        if (disabled) {
-            return `${baseClass} bg-gray-800 text-gray-500 cursor-not-allowed`;
-        }
-
-        switch (status) {
-            case 'copied':
-                return `${baseClass} bg-green-700 text-white`;
-            case 'error':
-                return `${baseClass} bg-red-700 text-white`;
-            default:
-                return `${baseClass} bg-blue-600 hover:bg-blue-700 text-white`;
-        }
-    };
-
     return (
         <button
             onClick={handleShare}
             disabled={disabled || !jsonString}
-            className={getButtonClass()}
+            className={`btn ${status === 'copied' ? 'btn-primary' : ''} ${status === 'error' ? 'btn-danger' : ''}`}
             title="Create shareable link with compressed JSON"
         >
             {getButtonText()}

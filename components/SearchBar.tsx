@@ -52,7 +52,10 @@ export default function SearchBar({
     const hasAnySearch = searchKey || searchValue;
 
     return (
-        <div className="flex items-center gap-2 p-3 bg-gray-800 border-b border-gray-700">
+        <div className="flex items-center gap-3 px-4 py-3 bg-[var(--bg-panel)] border-b border-[var(--border-main)]">
+            {/* Search icon */}
+            <span className="text-[var(--text-muted)]">🔍</span>
+
             {/* Search by Key */}
             <div className="flex-1 relative">
                 <input
@@ -60,12 +63,12 @@ export default function SearchBar({
                     value={searchKey}
                     onChange={handleKeyChange}
                     placeholder="Search by key..."
-                    className="w-full px-3 py-2 pr-8 bg-gray-900 text-gray-200 text-sm rounded border border-gray-700 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="input w-full pr-8"
                 />
                 {searchKey && (
                     <button
                         onClick={handleClearKey}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors cursor-pointer"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer"
                         title="Clear key search"
                     >
                         ✕
@@ -80,12 +83,12 @@ export default function SearchBar({
                     value={searchValue}
                     onChange={handleValueChange}
                     placeholder="Search by value..."
-                    className="w-full px-3 py-2 pr-8 bg-gray-900 text-gray-200 text-sm rounded border border-gray-700 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="input w-full pr-8"
                 />
                 {searchValue && (
                     <button
                         onClick={handleClearValue}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors cursor-pointer"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer"
                         title="Clear value search"
                     >
                         ✕
@@ -97,16 +100,16 @@ export default function SearchBar({
             {hasAnySearch && (
                 <button
                     onClick={handleClearAll}
-                    className="px-3 py-2 text-xs bg-gray-700 hover:bg-gray-600 text-gray-200 rounded transition-colors cursor-pointer whitespace-nowrap"
+                    className="btn"
                     title="Clear all searches"
                 >
-                    Clear All
+                    Reset
                 </button>
             )}
 
             {/* Match Count */}
             {hasAnySearch && matchCount !== undefined && (
-                <div className="text-xs text-gray-400 whitespace-nowrap">
+                <div className="text-sm text-[var(--text-muted)] whitespace-nowrap">
                     {matchCount} {matchCount === 1 ? 'match' : 'matches'}
                 </div>
             )}

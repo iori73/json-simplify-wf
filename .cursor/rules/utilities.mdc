@@ -1,0 +1,231 @@
+---
+description: Utility function conventions for lib/ directory
+globs:
+  - "lib/**/*.ts"
+alwaysApply: false
+---
+
+# Utility Function Conventions
+
+This document defines coding standards for utility functions in the `lib/` directory.
+
+## File References
+@lib/jsonUtils.ts
+@lib/urlUtils.ts
+@lib/clipboardUtils.ts
+@lib/types.ts
+
+## Core Principles
+
+### 1. Pure Functions
+Utility functions should be pure (no side effects, same input = same output):
+
+```typescript
+// Good: Pure function
+export function validateJson(jsonString: string): { isValid: boolean; error: string | null } {
+    if (!jsonString.trim()) {
+        return { isValid: false, error: 'JSON input is empty' };
+    }
+    try {
+        JSON.parse(jsonString);
+        return { isValid: true, error: null };
+    } catch (error) {
+        return { isValid: false, error: error instanceof Error ? error.message : 'Invalid JSON' };
+    }
+}
+
+// Bad: Side effects
+export function validateJson(jsonString: string): boolean {
+    console.log('Validating:', jsonString);  // Side effect
+    globalErrorState = null;  // Mutation
+    // ...
+}
+```
+
+### 2. Single Responsibility
+Each function should do one thing well:
+
+```typescript
+// Good: Single responsibility
+export function getJsonType(value: unknown): JsonValueType { ... }
+export function isLeafNode(value: unknown): boolean { ... }
+export function buildPath(parentPath: string, key: string, isArrayIndex: boolean): string { ... }
+
+// Bad: Multiple responsibilities
+export function processJson(value: unknown): { type: string; isLeaf: boolean; path: string } { ... }
+```
+
+## Documentation
+
+### JSDoc for Every Exported Function
+```typescript
+/**
+ * Validates if a string is valid JSON
+ * @param jsonString - String to validate
+ * @returns Object with isValid flag and error message if invalid
+ */
+export function validateJson(jsonString: string): { isValid: boolean; error: string | null } {
+```
+
+### File-Level Comment
+```typescript
+/**
+ * JSON Utilities
+ * 
+ * Helper functions for working with JSON data.
+ * These are pure functions that can be easily tested and understood.
+ */
+```
+
+## Type Safety
+
+### Use `unknown` Instead of `any`
+```typescript
+// Good
+export function getJsonType(value: unknown): JsonValueType {
+    if (value === null) return 'null';
+    if (Array.isArray(value)) return 'array';
+    return typeof value as JsonValueType;
+}
+
+// Bad
+export function getJsonType(value: any): string {
+```
+
+### Explicit Return Types
+Always specify return types:
+
+```typescript
+// Good
+export function prettifyJson(jsonString: string): string { ... }
+export function jsonToTree(json: unknown, key?: string): TreeNode { ... }
+
+// Bad
+export function prettifyJson(jsonString: string) { ... }  // Implicit return type
+```
+
+### Type Assertions
+Use type assertions sparingly and with care:
+
+```typescript
+// Acceptable: After type check
+if (type === 'object' && json !== null) {
+    const obj = json as Record<string, unknown>;
+    // ...
+}
+
+// Bad: Unsafe assertion
+const obj = json as Record<string, unknown>;  // No type check
+```
+
+## Error Handling
+
+### Return Result Objects
+For functions that can fail, return result objects instead of throwing:
+
+```typescript
+// Good: Result object
+export function validateJson(jsonString: string): { isValid: boolean; error: string | null } {
+    try {
+        JSON.parse(jsonString);
+        return { isValid: true, error: null };
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Invalid JSON';
+        return { isValid: false, error: errorMessage };
+    }
+}
+
+// Also acceptable: Return original on failure
+export function prettifyJson(jsonString: string): string {
+    try {
+        const parsed = JSON.parse(jsonString);
+        return JSON.stringify(parsed, null, 2);
+    } catch {
+        return jsonString;  // Return original if invalid
+    }
+}
+```
+
+### Type-Safe Error Handling
+```typescript
+// Good
+catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+}
+
+// Bad
+catch (error) {
+    const errorMessage = error.message;  // TypeScript error
+}
+```
+
+## Naming Conventions
+
+### Functions
+- Use camelCase: `validateJson`, `getJsonType`, `buildPath`
+- Start with verb: `get`, `validate`, `build`, `format`, `search`, `is`
+- Boolean functions use `is`: `isLeafNode`
+
+### Types
+- PascalCase: `TreeNode`, `JsonValueType`, `SearchMatch`
+- Interface for objects: `interface TreeNode { ... }`
+- Type alias for unions: `type JsonValueType = 'string' | 'number' | ...`
+
+## File Organization
+
+### One Concern Per File
+```
+lib/
+├── types.ts          # Type definitions only
+├── jsonUtils.ts      # JSON parsing/validation/transformation
+├── urlUtils.ts       # URL encoding/decoding for sharing
+├── clipboardUtils.ts # Clipboard operations
+└── ThemeContext.tsx  # Theme state management
+```
+
+### Export Pattern
+Export individual functions, not default export:
+
+```typescript
+// Good
+export function validateJson() { ... }
+export function prettifyJson() { ... }
+
+// Bad
+export default {
+    validateJson,
+    prettifyJson,
+};
+```
+
+## Recursion Pattern
+
+For tree traversal, use inner helper functions:
+
+```typescript
+export function searchTreeByKey(node: TreeNode, searchTerm: string): string[] {
+    const matches: string[] = [];
+    const lowerSearch = searchTerm.toLowerCase();
+
+    // Inner recursive function
+    function traverse(currentNode: TreeNode) {
+        if (currentNode.key.toLowerCase().includes(lowerSearch)) {
+            matches.push(currentNode.path);
+        }
+        if (currentNode.children) {
+            currentNode.children.forEach(traverse);
+        }
+    }
+
+    traverse(node);
+    return matches;
+}
+```
+
+## Testing Considerations
+
+Functions should be written to be easily testable:
+- No global state dependencies
+- No DOM manipulation (except in specific utils like clipboard)
+- Clear inputs and outputs
+- Deterministic behavior

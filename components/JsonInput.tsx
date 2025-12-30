@@ -12,7 +12,7 @@
 'use client';
 
 import { useState, useRef, ChangeEvent } from 'react';
-import { validateJson, prettifyJson } from '@/lib/jsonUtils';
+import { prettifyJson } from '@/lib/jsonUtils';
 
 interface JsonInputProps {
     value: string;
@@ -85,30 +85,30 @@ export default function JsonInput({ value, onChange, error }: JsonInputProps) {
     };
 
     return (
-        <div className="flex flex-col h-full bg-gray-900 border-r border-gray-700">
+        <div className="flex flex-col h-full">
             {/* Header with actions */}
-            <div className="flex items-center justify-between p-3 border-b border-gray-700">
-                <h2 className="text-sm font-semibold text-gray-200">JSON Input</h2>
+            <div className="flex items-center justify-between p-3 panel-header">
+                <h2 className="text-sm font-medium text-[var(--text-bright)]">Input</h2>
                 <div className="flex gap-2">
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 rounded transition-colors"
+                        className="btn"
                         title="Upload JSON file"
                     >
-                        Upload
+                        📁 Upload
                     </button>
                     <button
                         onClick={handlePrettify}
                         disabled={!value || !!error}
-                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="btn"
                         title="Format JSON"
                     >
-                        Prettify
+                        ✨ Prettify
                     </button>
                     <button
                         onClick={handleClear}
                         disabled={!value}
-                        className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="btn btn-danger"
                         title="Clear input"
                     >
                         Clear
@@ -127,7 +127,7 @@ export default function JsonInput({ value, onChange, error }: JsonInputProps) {
 
             {/* Text area for JSON input */}
             <div
-                className={`flex-1 relative ${isDragging ? 'bg-gray-800' : ''}`}
+                className={`flex-1 relative ${isDragging ? 'bg-[var(--color-primary)]/10' : ''}`}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -135,31 +135,31 @@ export default function JsonInput({ value, onChange, error }: JsonInputProps) {
                 <textarea
                     value={value}
                     onChange={handleTextChange}
-                    placeholder="Paste JSON here or drag & drop a .json file..."
-                    className="w-full h-full p-4 bg-gray-900 text-gray-100 font-mono text-sm resize-none focus:outline-none"
+                    placeholder="Paste your JSON here..."
+                    className="w-full h-full p-4 bg-transparent text-[var(--text-main)] font-mono text-sm resize-none focus:outline-none placeholder-[var(--text-muted)]"
                     spellCheck={false}
                 />
 
                 {/* Drag overlay */}
                 {isDragging && (
-                    <div className="absolute inset-0 bg-blue-500 bg-opacity-10 border-2 border-dashed border-blue-500 flex items-center justify-center">
-                        <p className="text-blue-400 font-semibold">Drop JSON file here</p>
+                    <div className="absolute inset-0 bg-[var(--color-primary)]/20 border-2 border-dashed border-[var(--color-primary)] flex items-center justify-center rounded">
+                        <p className="text-[var(--color-primary)] font-medium">Drop JSON file here</p>
                     </div>
                 )}
             </div>
 
             {/* Error display */}
             {error && (
-                <div className="p-3 bg-red-900 bg-opacity-30 border-t border-red-700">
-                    <p className="text-xs text-red-400 font-mono">{error}</p>
+                <div className="p-3 bg-[var(--color-error)]/20 border-t border-[var(--color-error)]">
+                    <p className="text-sm text-[var(--color-error)]">⚠ {error}</p>
                 </div>
             )}
 
             {/* Helper text */}
             {!value && !error && (
-                <div className="p-3 bg-gray-800 bg-opacity-50 border-t border-gray-700">
-                    <p className="text-xs text-gray-400">
-                        💡 Paste JSON, upload a file, or drag & drop
+                <div className="p-3 border-t border-[var(--border-main)]">
+                    <p className="text-xs text-[var(--text-muted)] text-center">
+                        Paste JSON or drag and drop a .json file
                     </p>
                 </div>
             )}

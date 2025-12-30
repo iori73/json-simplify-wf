@@ -1,0 +1,112 @@
+---
+description: Design system tokens and CSS variable usage rules for json-simplify
+globs:
+  - "**/*.css"
+  - "**/*.tsx"
+  - "**/*.jsx"
+alwaysApply: true
+---
+
+# Design System Rules
+
+This project uses CSS custom properties (variables) for consistent styling.
+All design decisions should use these tokens instead of hardcoded values.
+
+## File Reference
+@app/globals.css
+
+## Spacing System
+
+Use the spacing scale (8px base unit) for all margins, padding, and gaps:
+
+| Token         | Value | Usage |
+|---------------|-------|-------|
+| `--space-xs`  | 8px   | Component internal padding, minimal gaps |
+| `--space-sm`  | 16px  | Related content groupings (buttons, form fields) |
+| `--space-md`  | 24px  | Sub-section separations |
+| `--space-lg`  | 32px  | Section content gaps |
+| `--space-xl`  | 48px  | Major section divisions |
+| `--space-2xl` | 64px  | Top-level container gaps |
+
+### Rules
+- NEVER use hardcoded pixel values for spacing (e.g., `padding: 12px`)
+- Use CSS variables: `padding: var(--space-sm)`
+- In Tailwind, use: `p-[var(--space-sm)]` or the custom spacing classes
+
+## Typography Scale
+
+Use the typography scale for all font sizes:
+
+| Token         | Value     | Usage |
+|---------------|-----------|-------|
+| `--text-xs`   | 0.75rem   | Fine print, labels |
+| `--text-sm`   | 0.875rem  | Secondary text, captions |
+| `--text-base` | 1rem      | Body text (default) |
+| `--text-lg`   | 1.125rem  | Emphasized body text |
+| `--text-xl`   | 1.25rem   | Subheadings |
+| `--text-2xl`  | 1.5rem    | Section headings |
+| `--text-3xl`  | 2rem      | Page headings |
+
+### Rules
+- Use rem-based font sizes from the scale
+- Avoid hardcoded pixel values for font-size
+
+## Color System
+
+This project supports multiple themes (BTTF, Matrix). Use semantic color variables:
+
+### Background Colors
+- `--bg-main` - Main background
+- `--bg-panel` - Panel/card backgrounds
+- `--bg-panel-header` - Panel header backgrounds
+
+### Text Colors
+- `--text-main` - Primary text
+- `--text-muted` - Secondary/dimmed text
+- `--text-accent-1` - Input panel accent (red in BTTF)
+- `--text-accent-2` - Tree panel accent (green in BTTF)
+- `--text-accent-3` - Preview panel accent (yellow in BTTF)
+
+### Border Colors
+- `--border-main` - Default borders
+- `--border-accent-1/2/3` - Accent borders matching text colors
+
+### Rules
+- NEVER hardcode colors like `#ff0000` or `red`
+- Use theme-aware variables: `color: var(--text-main)`
+- For Tailwind: `text-[var(--text-main)]` or `bg-[var(--bg-panel)]`
+
+## Border Radius
+
+| Token          | Value   | Usage |
+|----------------|---------|-------|
+| `--radius-sm`  | 4px     | Small elements (buttons, inputs) |
+| `--radius-md`  | 8px     | Cards, panels |
+| `--radius-lg`  | 16px    | Large containers |
+| `--radius-full`| 9999px  | Circular elements |
+
+## Transitions
+
+| Token              | Value  | Usage |
+|--------------------|--------|-------|
+| `--duration-fast`  | 0.15s  | Micro-interactions (hover, focus) |
+| `--duration-normal`| 0.3s   | Standard transitions |
+| `--duration-slow`  | 0.5s   | Larger animations |
+
+### Example
+```css
+transition: all var(--duration-normal) var(--ease-out);
+```
+
+## Common Patterns
+
+### Panel Styling
+```tsx
+<div className="bg-[var(--bg-panel)] border border-[var(--border-main)] rounded-[var(--radius-md)]">
+```
+
+### Button Styling
+Use the `.theme-button` class for consistent button styling across themes.
+
+### Digital Text Effect
+Use the `.digital-text` class for the retro LCD/LED text effect.

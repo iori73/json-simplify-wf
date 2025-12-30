@@ -35,24 +35,28 @@ export default function TreeViewer({
 }: TreeViewerProps) {
     if (!rootNode) {
         return (
-            <div className="flex items-center justify-center h-full bg-gray-900 text-gray-400">
-                <div className="text-center">
-                    <p className="text-lg mb-2">No JSON loaded</p>
-                    <p className="text-sm">Paste JSON in the left panel to begin</p>
+            <div className="flex items-center justify-center h-full text-[var(--text-muted)]">
+                <div className="text-center p-8">
+                    <p className="text-4xl mb-4">🌳</p>
+                    <p className="text-lg mb-2">No Data</p>
+                    <p className="text-sm">Enter JSON in the left panel to see the tree view</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="h-full bg-gray-900 overflow-auto">
+        <div className="h-full overflow-auto custom-scrollbar">
             {/* Header */}
-            <div className="sticky top-0 bg-gray-900 border-b border-gray-700 p-3 z-10">
-                <h2 className="text-sm font-semibold text-gray-200">JSON Tree</h2>
+            <div className="sticky top-0 panel-header flex justify-between items-center z-10">
+                <h2 className="text-sm font-medium text-[var(--text-bright)]">Tree View</h2>
+                <span className="text-xs text-[var(--text-muted)]">
+                    {rootNode.children?.length || 0} {rootNode.type === 'array' ? 'items' : 'keys'}
+                </span>
             </div>
 
             {/* Tree content */}
-            <div className="p-2">
+            <div className="p-3 font-mono text-sm">
                 {rootNode.children && rootNode.children.map((child, index) => (
                     <TreeNodeComponent
                         key={`${child.path}-${index}`}

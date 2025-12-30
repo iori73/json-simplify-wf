@@ -1,16 +1,3 @@
-/**
- * JSON Simplify - Main Page
- * 
- * This is the main application page that orchestrates all components.
- * State management is kept simple and centralized here for easy understanding.
- * 
- * Key responsibilities:
- * - Manage JSON input state
- * - Build and maintain tree structure
- * - Handle search and expand/collapse
- * - Coordinate between components
- */
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -18,7 +5,6 @@ import JsonInput from '@/components/JsonInput';
 import TreeViewer from '@/components/TreeViewer';
 import PathPreview from '@/components/PathPreview';
 import SearchBar from '@/components/SearchBar';
-import ShareButton from '@/components/ShareButton';
 import { TreeNode } from '@/lib/types';
 import { validateJson, jsonToTree, searchTree, getParentPaths } from '@/lib/jsonUtils';
 import { getJsonFromUrl } from '@/lib/urlUtils';
@@ -64,7 +50,7 @@ export default function Home() {
           const firstLevelPaths = tree.children.map(child => child.path);
           setExpandedPaths(new Set(firstLevelPaths));
         }
-      } catch (error) {
+      } catch {
         setJsonError('Failed to build tree structure');
         setRootNode(null);
       }
@@ -116,20 +102,19 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-900 text-gray-100">
+    <div className="h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-main)] font-sans">
       {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
+      <header className="bg-[var(--bg-panel)] border-b border-[var(--border-main)] px-6 py-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white">JSON Simplify</h1>
-            <p className="text-sm text-gray-400 mt-1">
-              Navigate and explore JSON with ease
-            </p>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🔍</span>
+            <h1 className="text-xl font-semibold text-[var(--text-bright)]">
+              JSON Simplify
+            </h1>
           </div>
-          {/* <ShareButton
-            jsonString={jsonInput}
-            disabled={!rootNode || !!jsonError}
-          /> */}
+          <p className="text-sm text-[var(--text-muted)]">
+            Visualize, navigate, and explore JSON
+          </p>
         </div>
       </header>
 
@@ -145,9 +130,9 @@ export default function Home() {
       )}
 
       {/* Main content area */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden p-4 gap-4">
         {/* Left panel - JSON Input */}
-        <div className="w-1/3 min-w-[300px] max-w-[600px] flex flex-col">
+        <div className="w-1/3 min-w-[300px] max-w-[600px] flex flex-col panel overflow-hidden">
           <JsonInput
             value={jsonInput}
             onChange={setJsonInput}
@@ -156,7 +141,7 @@ export default function Home() {
         </div>
 
         {/* Right panel - Tree Viewer */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden panel">
           <TreeViewer
             rootNode={rootNode}
             onNodeClick={handleNodeClick}
@@ -171,15 +156,15 @@ export default function Home() {
 
       {/* Bottom panel - Path Preview */}
       {selectedNode && (
-        <div className="h-48 border-t border-gray-700">
+        <div className="h-36 mx-4 mb-4 panel overflow-hidden">
           <PathPreview selectedNode={selectedNode} />
         </div>
       )}
 
       {/* Footer */}
-      <footer className="bg-gray-800 border-t border-gray-700 px-6 py-3">
-        <p className="text-xs text-gray-400 text-center">
-          Click values to copy paths • Drag to select and copy JSON values • Search by key or value
+      <footer className="bg-[var(--bg-panel)] border-t border-[var(--border-main)] px-6 py-2">
+        <p className="text-xs text-[var(--text-muted)] text-center">
+          Made with ❤️ for developers who work with JSON
         </p>
       </footer>
     </div>

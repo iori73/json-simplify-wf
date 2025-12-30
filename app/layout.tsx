@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bodyFont = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const monoFont = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "JSON Simplify - Navigate and Explore JSON",
-  description: "A powerful JSON viewer and explorer with path navigation, search, and shareable links",
+  title: "JSON Simplify",
+  description: "A simple, powerful tool to visualize, navigate, and explore JSON data structures.",
 };
 
 export default function RootLayout({
@@ -24,10 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900 text-gray-100`}
-      >
+    <html lang="en">
+      <body className={`${bodyFont.variable} ${monoFont.variable} antialiased`}>
         {children}
         <Analytics />
       </body>
