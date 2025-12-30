@@ -12,6 +12,9 @@
 'use client';
 
 import { ChangeEvent } from 'react';
+import { Search, X, RotateCcw } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface SearchBarProps {
     searchKey: string;
@@ -54,63 +57,66 @@ export default function SearchBar({
     return (
         <div className="flex items-center gap-3 px-4 py-3 bg-[var(--bg-panel)] border-b border-[var(--border-main)]">
             {/* Search icon */}
-            <span className="text-[var(--text-muted)]">🔍</span>
+            <Search className="h-4 w-4 text-[var(--text-muted)] flex-shrink-0" />
 
             {/* Search by Key */}
             <div className="flex-1 relative">
-                <input
+                <Input
                     type="text"
                     value={searchKey}
                     onChange={handleKeyChange}
                     placeholder="Search by key..."
-                    className="input w-full pr-8"
+                    className="pr-8"
                 />
                 {searchKey && (
                     <button
                         onClick={handleClearKey}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer p-1 rounded hover:bg-[var(--bg-hover)]"
                         title="Clear key search"
                     >
-                        ✕
+                        <X className="h-3 w-3" />
                     </button>
                 )}
             </div>
 
             {/* Search by Value */}
             <div className="flex-1 relative">
-                <input
+                <Input
                     type="text"
                     value={searchValue}
                     onChange={handleValueChange}
                     placeholder="Search by value..."
-                    className="input w-full pr-8"
+                    className="pr-8"
                 />
                 {searchValue && (
                     <button
                         onClick={handleClearValue}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors cursor-pointer p-1 rounded hover:bg-[var(--bg-hover)]"
                         title="Clear value search"
                     >
-                        ✕
+                        <X className="h-3 w-3" />
                     </button>
                 )}
             </div>
 
             {/* Clear All Button */}
             {hasAnySearch && (
-                <button
+                <Button
+                    variant="outline"
+                    size="sm"
                     onClick={handleClearAll}
-                    className="btn"
                     title="Clear all searches"
                 >
+                    <RotateCcw className="h-4 w-4" />
                     Reset
-                </button>
+                </Button>
             )}
 
             {/* Match Count */}
             {hasAnySearch && matchCount !== undefined && (
-                <div className="text-sm text-[var(--text-muted)] whitespace-nowrap">
-                    {matchCount} {matchCount === 1 ? 'match' : 'matches'}
+                <div className="text-sm text-[var(--text-muted)] whitespace-nowrap bg-[var(--bg-panel-header)] px-3 py-1 rounded-md border border-[var(--border-main)]">
+                    <span className="font-medium text-[var(--text-main)]">{matchCount}</span>
+                    {' '}{matchCount === 1 ? 'match' : 'matches'}
                 </div>
             )}
         </div>

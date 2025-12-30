@@ -12,7 +12,10 @@
 'use client';
 
 import { useState, useRef, ChangeEvent } from 'react';
+import { Upload, Sparkles, Trash2, AlertCircle, Lightbulb } from 'lucide-react';
 import { prettifyJson } from '@/lib/jsonUtils';
+import { Button } from '@/components/ui/button';
+import { Tooltip } from '@/components/ui/tooltip';
 
 interface JsonInputProps {
     value: string;
@@ -88,31 +91,41 @@ export default function JsonInput({ value, onChange, error }: JsonInputProps) {
         <div className="flex flex-col h-full">
             {/* Header with actions */}
             <div className="flex items-center justify-between p-3 panel-header">
-                <h2 className="text-sm font-medium text-[var(--text-bright)]">Input</h2>
+                <h2 className="text-sm font-medium text-[var(--text-bright)]">JSON Input</h2>
                 <div className="flex gap-2">
-                    <button
-                        onClick={() => fileInputRef.current?.click()}
-                        className="btn"
-                        title="Upload JSON file"
-                    >
-                        📁 Upload
-                    </button>
-                    <button
-                        onClick={handlePrettify}
-                        disabled={!value || !!error}
-                        className="btn"
-                        title="Format JSON"
-                    >
-                        ✨ Prettify
-                    </button>
-                    <button
-                        onClick={handleClear}
-                        disabled={!value}
-                        className="btn btn-danger"
-                        title="Clear input"
-                    >
-                        Clear
-                    </button>
+                    <Tooltip content="Upload JSON file">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <Upload className="h-4 w-4" />
+                            Upload
+                        </Button>
+                    </Tooltip>
+                    <Tooltip content="Format JSON">
+                        <Button
+                            variant="default"
+                            size="sm"
+                            onClick={handlePrettify}
+                            disabled={!value || !!error}
+                        >
+                            <Sparkles className="h-4 w-4" />
+                            Prettify
+                        </Button>
+                    </Tooltip>
+                    <Tooltip content="Clear input">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleClear}
+                            disabled={!value}
+                            className="text-[var(--color-error)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10"
+                        >
+                            <Trash2 className="h-4 w-4" />
+                            Clear
+                        </Button>
+                    </Tooltip>
                 </div>
             </div>
 
@@ -135,8 +148,8 @@ export default function JsonInput({ value, onChange, error }: JsonInputProps) {
                 <textarea
                     value={value}
                     onChange={handleTextChange}
-                    placeholder="Paste your JSON here..."
-                    className="w-full h-full p-4 bg-transparent text-[var(--text-main)] font-mono text-sm resize-none focus:outline-none placeholder-[var(--text-muted)]"
+                    placeholder=""
+                    className="w-full h-full p-4 bg-transparent text-[var(--text-main)] font-mono text-sm resize-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-inset placeholder-[var(--text-muted)]"
                     spellCheck={false}
                 />
 
@@ -150,16 +163,18 @@ export default function JsonInput({ value, onChange, error }: JsonInputProps) {
 
             {/* Error display */}
             {error && (
-                <div className="p-3 bg-[var(--color-error)]/20 border-t border-[var(--color-error)]">
-                    <p className="text-sm text-[var(--color-error)]">⚠ {error}</p>
+                <div className="p-3 bg-[var(--color-error)]/10 border-t border-[var(--color-error)]/50 flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-[var(--color-error)] flex-shrink-0" />
+                    <p className="text-sm text-[var(--color-error)]">{error}</p>
                 </div>
             )}
 
             {/* Helper text */}
             {!value && !error && (
-                <div className="p-3 border-t border-[var(--border-main)]">
-                    <p className="text-xs text-[var(--text-muted)] text-center">
-                        Paste JSON or drag and drop a .json file
+                <div className="p-3 border-t border-[var(--border-main)] flex items-center justify-center gap-2">
+                    <Lightbulb className="h-4 w-4 text-[var(--text-muted)]" />
+                    <p className="text-sm text-[var(--text-muted)]">
+                        Paste JSON, upload a file, or drag &amp; drop
                     </p>
                 </div>
             )}

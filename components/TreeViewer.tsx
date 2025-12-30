@@ -12,6 +12,7 @@
 'use client';
 
 import { TreeNode } from '@/lib/types';
+import { FileJson } from 'lucide-react';
 import TreeNodeComponent from './TreeNodeComponent';
 
 interface TreeViewerProps {
@@ -37,9 +38,9 @@ export default function TreeViewer({
         return (
             <div className="flex items-center justify-center h-full text-[var(--text-muted)]">
                 <div className="text-center p-8">
-                    <p className="text-4xl mb-4">🌳</p>
-                    <p className="text-lg mb-2">No Data</p>
-                    <p className="text-sm">Enter JSON in the left panel to see the tree view</p>
+                    <FileJson className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium mb-2 text-[var(--text-main)]">No JSON loaded</p>
+                    <p className="text-sm">Paste JSON in the left panel to begin</p>
                 </div>
             </div>
         );
@@ -50,7 +51,7 @@ export default function TreeViewer({
             {/* Header */}
             <div className="sticky top-0 panel-header flex justify-between items-center z-10">
                 <h2 className="text-sm font-medium text-[var(--text-bright)]">Tree View</h2>
-                <span className="text-xs text-[var(--text-muted)]">
+                <span className="text-xs text-[var(--text-muted)] bg-[var(--bg-hover)] px-2 py-1 rounded">
                     {rootNode.children?.length || 0} {rootNode.type === 'array' ? 'items' : 'keys'}
                 </span>
             </div>

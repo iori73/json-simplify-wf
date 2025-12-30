@@ -17,6 +17,7 @@ import { TreeNode } from '@/lib/types';
 import { formatValueDisplay, isLeafNode, toJsonString } from '@/lib/jsonUtils';
 import { copyToClipboard } from '@/lib/clipboardUtils';
 import { useState } from 'react';
+import { ChevronRight, Check } from 'lucide-react';
 
 interface TreeNodeComponentProps {
     node: TreeNode;
@@ -95,19 +96,16 @@ export default function TreeNodeComponent({
                 className={`
                     flex items-center gap-2 py-1 px-2 cursor-pointer rounded transition-colors duration-150
                     hover:bg-[var(--bg-hover)]
-                    ${isSelected ? 'bg-[var(--color-primary)]/20 border border-[var(--color-primary)]' : ''}
+                    ${isSelected ? 'bg-[var(--color-primary)]/20 ring-1 ring-[var(--color-primary)]' : ''}
                     ${matchesSearch ? 'bg-[var(--color-warning)]/20' : ''}
                 `}
                 style={{ paddingLeft: `${node.depth * 16 + 8}px` }}
             >
                 {/* Expand/collapse icon */}
                 {hasChildren && (
-                    <span 
-                        className="text-[var(--text-muted)] w-4 flex-shrink-0 text-xs transition-transform duration-200"
-                        style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
-                    >
-                        ▶
-                    </span>
+                    <ChevronRight 
+                        className={`h-4 w-4 text-[var(--text-muted)] flex-shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+                    />
                 )}
                 {!hasChildren && <span className="w-4 flex-shrink-0" />}
 
@@ -127,8 +125,9 @@ export default function TreeNodeComponent({
 
                 {/* Copy hint */}
                 {showCopyHint && (
-                    <span className="text-xs text-[var(--color-success)] ml-2">
-                        ✓ Path copied
+                    <span className="flex items-center gap-1 text-xs text-[var(--color-success)] ml-2">
+                        <Check className="h-3 w-3" />
+                        Path copied
                     </span>
                 )}
             </div>

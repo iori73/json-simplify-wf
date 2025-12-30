@@ -106,14 +106,11 @@ export default function Home() {
       {/* Header */}
       <header className="bg-[var(--bg-panel)] border-b border-[var(--border-main)] px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🔍</span>
-            <h1 className="text-xl font-semibold text-[var(--text-bright)]">
-              JSON Simplify
-            </h1>
-          </div>
+          <h1 className="text-xl font-semibold text-[var(--text-bright)]">
+            JSON Simplify
+          </h1>
           <p className="text-sm text-[var(--text-muted)]">
-            Visualize, navigate, and explore JSON
+            Navigate and explore JSON with ease
           </p>
         </div>
       </header>
@@ -164,7 +161,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-[var(--bg-panel)] border-t border-[var(--border-main)] px-6 py-2">
         <p className="text-xs text-[var(--text-muted)] text-center">
-          Made with ❤️ for developers who work with JSON
+          Click values to copy paths • Drag to select and copy JSON values • Search by key or value
         </p>
       </footer>
     </div>

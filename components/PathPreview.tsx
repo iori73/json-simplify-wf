@@ -13,6 +13,8 @@ import { TreeNode } from '@/lib/types';
 import { toJsonString, isLeafNode } from '@/lib/jsonUtils';
 import { copyToClipboard } from '@/lib/clipboardUtils';
 import { useState } from 'react';
+import { Copy, Check, MousePointerClick } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface PathPreviewProps {
     selectedNode: TreeNode | null;
@@ -72,8 +74,9 @@ export default function PathPreview({ selectedNode }: PathPreviewProps) {
 
     if (!selectedNode) {
         return (
-            <div className="h-full flex items-center justify-center">
-                <p className="text-sm text-[var(--text-muted)]">
+            <div className="h-full flex items-center justify-center gap-2 text-[var(--text-muted)]">
+                <MousePointerClick className="h-4 w-4" />
+                <p className="text-sm">
                     Click a node to see its path and value
                 </p>
             </div>
@@ -87,16 +90,28 @@ export default function PathPreview({ selectedNode }: PathPreviewProps) {
                 <div className="flex items-center justify-between gap-3">
                     <div className="flex-1 min-w-0">
                         <div className="text-xs text-[var(--text-muted)] mb-1">Path:</div>
-                        <code className="text-sm text-[var(--color-primary)] font-mono bg-[var(--bg-main)] px-2 py-1 rounded block truncate">
+                        <code className="text-sm text-[var(--color-primary)] font-mono bg-[var(--bg-main)] px-2 py-1 rounded block truncate border border-[var(--border-main)]">
                             {selectedNode.path}
                         </code>
                     </div>
-                    <button
+                    <Button
+                        variant="outline"
+                        size="sm"
                         onClick={handleCopyPath}
-                        className="btn flex-shrink-0"
+                        className="flex-shrink-0"
                     >
-                        {copiedItem === 'path' ? '✓ Copied' : '📋 Copy Path'}
-                    </button>
+                        {copiedItem === 'path' ? (
+                            <>
+                                <Check className="h-4 w-4" />
+                                Copied
+                            </>
+                        ) : (
+                            <>
+                                <Copy className="h-4 w-4" />
+                                Copy Path
+                            </>
+                        )}
+                    </Button>
                 </div>
             </div>
 
@@ -107,14 +122,25 @@ export default function PathPreview({ selectedNode }: PathPreviewProps) {
                 {/* Copy value button */}
                 <div className="mt-2 pt-2 border-t border-[var(--border-main)] flex items-center justify-between">
                     <span className="text-xs text-[var(--text-muted)]">
-                        Type: <span className="text-[var(--color-primary)]">{selectedNode.type}</span>
+                        Type: <span className="text-[var(--color-primary)] font-medium">{selectedNode.type}</span>
                     </span>
-                    <button
+                    <Button
+                        variant="outline"
+                        size="sm"
                         onClick={handleCopyValue}
-                        className="btn"
                     >
-                        {copiedItem === 'value' ? '✓ Copied' : '📋 Copy Value'}
-                    </button>
+                        {copiedItem === 'value' ? (
+                            <>
+                                <Check className="h-4 w-4" />
+                                Copied
+                            </>
+                        ) : (
+                            <>
+                                <Copy className="h-4 w-4" />
+                                Copy Value
+                            </>
+                        )}
+                    </Button>
                 </div>
             </div>
         </div>
